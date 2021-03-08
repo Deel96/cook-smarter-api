@@ -10,7 +10,7 @@ export class App {
     private mountRoutes(): void {
         const router = express.Router();
         router.get('/', (req, res) => {
-            res.json({ message: "Hello Heroku"});
+            res.json({ message: "Hello Heroku!"});
 
         });
         this.express.use('/', router);
