@@ -1,4 +1,5 @@
 import * as express from 'express';
+import {User} from "./models/user";
 
 export class App {
 
@@ -9,8 +10,8 @@ export class App {
     }
     private mountRoutes(): void {
         const router = express.Router();
-        router.get('/', (req, res) => {
-            res.json({ message: "Hallo Pupsi! "});
+        router.get('/', async (req, res) => {
+            res.json({ message: await User.findOne(1)});
 
         });
         this.express.use('/', router);
