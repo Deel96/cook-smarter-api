@@ -28,6 +28,9 @@ export class Recipe extends BaseEntity {
     @Column()
     online: boolean;
 
+    @Column({default:"Test"})
+    author:string;
+
     @ManyToMany(type => Tag)
     @JoinTable()
     tags: Tag[];
