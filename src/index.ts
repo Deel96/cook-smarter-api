@@ -12,7 +12,7 @@ const app = new App([new RecipeRoute()]);
 
 const dataBaseInitiator = new DatabaseInitiator();
 
-dataBaseInitiator.initDataBase(false,false).then(
+dataBaseInitiator.initDataBase(true,true).then(
 
 app.express.listen(port, (err) => {
     if (err) {
