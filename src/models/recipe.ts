@@ -31,7 +31,7 @@ export class Recipe extends BaseEntity {
     @Column()
     online: boolean;
 
-    @Column()
+    @Column({type:"longtext"})
     picture: string;
 
     @ManyToOne(()=>User,user => user.createdRecipes)

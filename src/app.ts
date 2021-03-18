@@ -7,13 +7,25 @@ import * as session from "express-session";
 import * as bodyParser from "body-parser"
 import * as flash from "connect-flash"
 import {Recipe} from "./models/recipe";
+import {DatabaseInitiator} from "./databaseInitiator";
+import Route from "./interfaces/route.interface";
 
 export class App {
 
     public express;
-    constructor() {
+    constructor(routes:Route[]) {
         this.express = express();
 
+        this.initPassport();
+        this.mountRoutes(routes);
+    }
+    private mountRoutes(routes:Route[]): void {
+              routes.forEach(route => {
+                this.express.use('/', route.router);
+            });
+            }
+
+    private initPassport():void{
         this.express.use(bodyParser.json());
 
         this.express.use(session({ cookie: { maxAge: 60* 60* 1000 },
@@ -26,7 +38,7 @@ export class App {
         passport.use(new passportLocal.Strategy(
             async function(username, password, done) {
                 const foundUser = await User.findOne({username:username});
-                    return done(null, foundUser);
+                return done(null, foundUser);
             }
         ));
 
@@ -43,55 +55,5 @@ export class App {
 
         this.express.use(passport.initialize());
         this.express.use(passport.session());
-
-        this.mountRoutes();
-    }
-    private mountRoutes(): void {
-        const router = Router();
-
-
-        router.get('/', async (req, res) => {
-            res.json({ message: await User.findOne(1)});
-
-        });
-
-
-        router.get('/users/:id', async (req:Request, res) => {
-            req.user
-            res.json({message: await User.findOne(req.params.id)});
-        })
-
-        router.post('/login',
-            passport.authenticate('local'), function(req,res){
-                res.send('Hello login!')
-            }
-        );
-
-
-        router.get('/foodplan', async (req:Request, res) => {
-            res.json( await User.findOne(req.params.id));
-        })
-
-        router.get('/recipes', async (req:Request, res) => {
-            res.json(await Recipe.find());
-        })
-
-        router.get('/recipes/:id', async (req:Request, res) => {
-            res.json(await Recipe.findOne(req.params.id));
-        })
-
-        router.get('/me/recipes', async (req:Request, res) => {
-            const user:any = req.user;
-            try {
-                res.json(await Recipe.find({author: user.username}));
-            }
-            catch(err){
-                res.statusCode = 500;
-                res.send("Server error")
-            }
-
-        })
-
-        this.express.use('/', router);
     }
 }
