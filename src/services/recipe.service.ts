@@ -7,12 +7,12 @@ class RecipeService {
         return result;
     }
 
-    public async findRecipeById(recipeId: number): Promise<Recipe> {
-        const foundrecipe: Recipe = await Recipe.findOne({ where: { id: recipeId } });
-        if (!foundrecipe) throw new HttpException(409, "You're not user");
-
-        return findUser;
-    }
+    // public async findRecipeById(recipeId: number): Promise<Recipe> {
+    //     const foundrecipe: Recipe = await Recipe.findOne({ where: { id: recipeId } });
+    //     if (!foundrecipe) throw new HttpException(409, "You're not user");
+    //
+    //     return findUser;
+    // }
 
 
 }
