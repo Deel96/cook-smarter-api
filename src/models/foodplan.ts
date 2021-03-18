@@ -1,6 +1,7 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable, ManyToOne} from "typeorm";
-import {Tag} from "./tag";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable, ManyToOne, OneToMany} from "typeorm";
 import {User} from "./user";
+import {Grocerylist} from "./grocerylist";
+import {Cookday} from "./cookday";
 
 @Entity()
 export class Foodplan extends BaseEntity {
@@ -14,5 +15,12 @@ export class Foodplan extends BaseEntity {
     @Column({type:"date"})
     foodplan_end: Date;
 
-    @ManyToOne(type => User, user => user.foodplans) user: User;
+    @ManyToOne(type => User, user => user.foodplans)
+    user: User;
+
+    @OneToMany(()=>Grocerylist,grocerylist=>grocerylist.foodplan)
+    grocerylists: Grocerylist[];
+
+    @OneToMany(()=>Cookday,cookday=>cookday.foodplan)
+    cookdays: Cookday[];
 }

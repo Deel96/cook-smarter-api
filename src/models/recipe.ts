@@ -1,5 +1,8 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable, OneToMany, ManyToOne} from "typeorm";
 import {Tag} from "./tag";
+import {IngredientEntry} from "./ingredientEntry";
+import {User} from "./user";
+import {Cookday} from "./cookday";
 
 @Entity()
 export class Recipe extends BaseEntity {
@@ -22,16 +25,27 @@ export class Recipe extends BaseEntity {
     @Column()
     difficulty: number;
 
-    @Column()
+    @Column({type:"date"})
     datePosted: string;
 
     @Column()
     online: boolean;
 
-    @Column({default:"Test"})
-    author:string;
+    @Column()
+    picture: string;
+
+    @ManyToOne(()=>User,user => user.createdRecipes)
+    author:User;
 
     @ManyToMany(type => Tag)
     @JoinTable()
     tags: Tag[];
+
+    @OneToMany(()=>IngredientEntry, ingredientEntry => ingredientEntry.recipe)
+    ingredients: IngredientEntry[];
+
+    @ManyToOne(()=>Cookday,cookday => cookday.recipes)
+    cookday:Cookday;
+
+
 }

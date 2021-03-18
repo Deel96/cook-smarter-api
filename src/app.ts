@@ -6,7 +6,6 @@ import * as passportLocal from "passport-local"
 import * as session from "express-session";
 import * as bodyParser from "body-parser"
 import * as flash from "connect-flash"
-import {userInfo} from "os";
 import {Recipe} from "./models/recipe";
 
 export class App {
@@ -83,9 +82,14 @@ export class App {
 
         router.get('/me/recipes', async (req:Request, res) => {
             const user:any = req.user;
+            try {
+                res.json(await Recipe.find({author: user.username}));
+            }
+            catch(err){
+                res.statusCode = 500;
+                res.send("Server error")
+            }
 
-
-            res.json(await Recipe.find({author:user.username}));
         })
 
         this.express.use('/', router);

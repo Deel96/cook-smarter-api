@@ -1,5 +1,8 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, ManyToMany, JoinTable} from "typeorm";
 import {Foodplan} from "./foodplan";
+import {Recipe} from "./recipe";
+import {Rating} from "./rating";
+import {Comment} from "./comment"
 
 @Entity()
 export class User extends BaseEntity {
@@ -22,6 +25,19 @@ export class User extends BaseEntity {
     @Column()
     planday: string;
 
-    @OneToMany(type => Foodplan, foodplan => foodplan.user) foodplans: Foodplan[];
+    @OneToMany(type => Foodplan, foodplan => foodplan.user)
+    foodplans: Foodplan[];
 
+    @OneToMany(()=> Rating, rating=>rating.author)
+    createdRatings: Rating[];
+
+    @OneToMany(()=> Comment, comment=>comment.author)
+    createdComments: Comment[];
+
+    @OneToMany(()=> Recipe, recipe=>recipe.author)
+    createdRecipes: Recipe[];
+
+    @ManyToMany(()=>Recipe)
+    @JoinTable()
+    likedRecipe: Recipe[];
 }
