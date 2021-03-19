@@ -2,7 +2,8 @@ import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTabl
 import {Tag} from "./tag";
 import {IngredientEntry} from "./ingredientEntry";
 import {User} from "./user";
-import {Cookday} from "./cookday";
+import {Rating} from "./rating";
+import {Comment} from "./comment";
 
 @Entity()
 export class Recipe extends BaseEntity {
@@ -23,7 +24,7 @@ export class Recipe extends BaseEntity {
     cookingtime: number;
 
     @Column()
-    difficulty: number;
+    difficulty: string;
 
     @Column({type:"date"})
     datePosted: string;
@@ -44,8 +45,11 @@ export class Recipe extends BaseEntity {
     @OneToMany(()=>IngredientEntry, ingredientEntry => ingredientEntry.recipe)
     ingredients: IngredientEntry[];
 
-    @ManyToOne(()=>Cookday,cookday => cookday.recipes)
-    cookday:Cookday;
+    @OneToMany(()=>Comment, comment => comment.recipe)
+    comments: Comment[];
+
+    @OneToMany(()=>Rating, rating => rating.recipe)
+    ratings: Rating[];
 
 
 }

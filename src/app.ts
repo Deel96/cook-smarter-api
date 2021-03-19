@@ -1,4 +1,3 @@
-import {Request,Response,Router}from 'express';
 import * as express from 'express';
 import {User} from "./models/user";
 import * as passport from "passport"
@@ -6,8 +5,7 @@ import * as passportLocal from "passport-local"
 import * as session from "express-session";
 import * as bodyParser from "body-parser"
 import * as flash from "connect-flash"
-import {Recipe} from "./models/recipe";
-import {DatabaseInitiator} from "./databaseInitiator";
+import errorMiddleware from './middlewares/error.middleware';
 import Route from "./interfaces/route.interface";
 
 export class App {
@@ -18,6 +16,7 @@ export class App {
 
         this.initPassport();
         this.mountRoutes(routes);
+        this.express.use(errorMiddleware);
     }
     private mountRoutes(routes:Route[]): void {
               routes.forEach(route => {

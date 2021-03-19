@@ -1,5 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne} from "typeorm";
 import {User} from "./user";
+import {Recipe} from "./recipe";
 
 @Entity()
 export class Rating extends BaseEntity {
@@ -15,4 +16,7 @@ export class Rating extends BaseEntity {
 
     @ManyToOne(()=>User,user => user.createdRatings)
     author:User
+
+    @ManyToOne(()=>Recipe,recipe=>recipe.ratings)
+    recipe:Recipe
 }

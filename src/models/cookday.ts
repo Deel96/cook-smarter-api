@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMany, ManyToMany, JoinTable} from "typeorm";
 import {Foodplan} from "./foodplan";
 import {Recipe} from "./recipe";
 
@@ -14,7 +14,10 @@ export class Cookday extends BaseEntity {
     @ManyToOne(() => Foodplan, foodplan => foodplan.cookdays)
     foodplan: Foodplan;
 
-    @OneToMany(() => Recipe, recipe => recipe.cookday)
-    recipes: Recipe[];
+
+    @ManyToMany(type=>Recipe)
+    @JoinTable()
+    recipes:Recipe;
+
 
 }

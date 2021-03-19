@@ -5,7 +5,7 @@ import * as passport from "passport";
 import {Recipe} from "../models/recipe";
 
 class RecipeRoute {
-    public path = '/recipes';
+    //public path = '/recipes';
     public router = Router();
     public recipeController = new RecipeController();
 
@@ -14,9 +14,9 @@ class RecipeRoute {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}`, this.recipeController.getAllRecipes);
-      //  this.router.get(`${this.path}/:id(\\d+)`, this.recipeController.getUserById);
-      //  this.router.post(`${this.path}`, validationMiddleware(CreateUserDto, 'body'), this.usersController.createUser);
+        this.router.get("/recipes", this.recipeController.getAllRecipes);
+        //this.router.get(`${this.path}/:id(\\d+)`, this.recipeController.);
+        this.router.post("/me/recipes", this.recipeController.addRecipe);
        // this.router.put(`${this.path}/:id(\\d+)`, validationMiddleware(CreateUserDto, 'body', true), this.usersController.updateUser);
        // this.router.delete(`${this.path}/:id(\\d+)`, this.usersController.deleteUser);
         this.router.get('/', async (req, res) => {
