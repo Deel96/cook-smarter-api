@@ -29,12 +29,22 @@ export class DatabaseInitiator{
 
         const connection = await createConnection(options);
 
+        this.createEntities();
+
+
+
+
+
+    }
+
+    async createEntities(){
         const user = new User();
         user.username = "Dennis2";
         user.servingsize = 1;
         user.planday ="Montag";
         user.password="1234";
         user.email="test@test.de";
+        user.likedRecipes=[];
         await user.save();
 
         // const user2 = new User();
@@ -78,7 +88,7 @@ export class DatabaseInitiator{
 
 
         const recipe = new Recipe();
-        recipe.name = "Butterbrot";
+        recipe.name = "Butterbrot  Liked";
         recipe.directions = "Brot schneiden";
         recipe.preparationtime=0;
         recipe.cookingtime=5;
@@ -91,9 +101,7 @@ export class DatabaseInitiator{
         recipe.tags = [tag]
         await recipe.save();
 
-
-
-
-
+        user.likedRecipes.push(recipe);
+        await user.save();
     }
 }

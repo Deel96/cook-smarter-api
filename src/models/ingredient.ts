@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, ManyToOne} from "typeorm";
 import {IngredientEntry} from "./ingredientEntry";
 import {GroceryEntry} from "./groceryEntry";
 
@@ -17,3 +17,4 @@ export class Ingredient extends BaseEntity {
     @OneToMany(()=>GroceryEntry,groceryEntry => groceryEntry.ingredient)
     groceryentries : GroceryEntry[];
 }
+
