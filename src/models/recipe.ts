@@ -1,9 +1,20 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable, OneToMany, ManyToOne} from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    BaseEntity,
+    ManyToMany,
+    JoinTable,
+    OneToMany,
+    ManyToOne,
+    AfterLoad, AfterInsert, AfterUpdate
+} from "typeorm";
 import {Tag} from "./tag";
 import {IngredientEntry} from "./ingredientEntry";
 import {User} from "./user";
 import {Rating} from "./rating";
 import {Comment} from "./comment";
+import {RatingInfo} from "./DTOs/rating";
 
 @Entity()
 export class Recipe extends BaseEntity {
@@ -26,7 +37,7 @@ export class Recipe extends BaseEntity {
     @Column()
     difficulty: string;
 
-    @Column({type:"date"})
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
     datePosted: string;
 
     @Column()
@@ -42,14 +53,16 @@ export class Recipe extends BaseEntity {
     @JoinTable()
     tags: Tag[];
 
-    @OneToMany(()=>IngredientEntry, ingredientEntry => ingredientEntry.recipe)
+    @OneToMany(()=>IngredientEntry, ingredientEntry => ingredientEntry.recipe,{onDelete: 'CASCADE'})
     ingredients: IngredientEntry[];
 
-    @OneToMany(()=>Comment, comment => comment.recipe)
+    @OneToMany(()=>Comment, comment => comment.recipe,{onDelete: 'CASCADE'})
     comments: Comment[];
 
-    @OneToMany(()=>Rating, rating => rating.recipe)
+    @OneToMany(()=>Rating, rating => rating.recipe,{onDelete: 'CASCADE'})
     ratings: Rating[];
+
+    rating: RatingInfo
 
 
 }

@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, ManyToMany, JoinTable} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, ManyToMany, JoinTable, OneToOne} from "typeorm";
 import {Foodplan} from "./foodplan";
 import {Recipe} from "./recipe";
 import {Rating} from "./rating";
@@ -10,10 +10,10 @@ export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({unique:true})
     username: string;
 
-    @Column()
+    @Column({unique:true})
     email: string;
 
     @Column()
@@ -25,8 +25,8 @@ export class User extends BaseEntity {
     @Column()
     planday: string;
 
-    @OneToMany(type => Foodplan, foodplan => foodplan.user)
-    foodplans: Foodplan[];
+    @OneToOne(type => Foodplan, foodplan => foodplan.user)
+    foodplan: Foodplan;
 
     @OneToMany(()=> Rating, rating=>rating.author)
     createdRatings: Rating[];
@@ -34,7 +34,7 @@ export class User extends BaseEntity {
     @OneToMany(()=> Comment, comment=>comment.author)
     createdComments: Comment[];
 
-    @OneToMany(()=> Recipe, recipe=>recipe.author)
+    @OneToMany(()=> Recipe, recipe=>recipe.author,{ cascade: true })
     createdRecipes: Recipe[];
 
     @ManyToMany(()=>Recipe)

@@ -4,6 +4,9 @@ import {Recipe} from "./recipe";
 
 @Entity()
 export class Cookday extends BaseEntity {
+    constructor() {
+        super();
+    }
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -17,7 +20,7 @@ export class Cookday extends BaseEntity {
 
     @ManyToMany(type=>Recipe)
     @JoinTable()
-    recipes:Recipe;
+    recipes:Recipe[];
 
 
 }

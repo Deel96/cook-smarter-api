@@ -3,9 +3,11 @@
 import {App}from './app'
 import RecipeRoute from "./routes/recipe.route";
 import {DatabaseInitiator} from "./databaseInitiator";
+import AuthRoute from "./routes/auth.route";
+import FoodplanRoute from "./routes/foodplan.route";
 const port = process.env.PORT || 3000;
 const recipeRoute = new RecipeRoute();
-const app = new App([new RecipeRoute()]);
+const app = new App([new RecipeRoute(), new AuthRoute(), new FoodplanRoute()]);
 
 
 

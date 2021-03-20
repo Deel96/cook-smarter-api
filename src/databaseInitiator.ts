@@ -1,10 +1,14 @@
 import 'reflect-metadata';
+import {Comment} from "./models/comment";
 import {User} from "./models/user";
 import {Recipe} from "./models/recipe";
 import {Connection, ConnectionOptions, createConnection} from "typeorm";
 import {Tag} from "./models/tag";
 import {IngredientEntry} from "./models/ingredientEntry";
 import {Ingredient} from "./models/ingredient";
+import {Foodplan} from "./models/foodplan";
+import {now} from "./util/timeGetter";
+import {Cookday} from "./models/cookday";
 
 export class DatabaseInitiator{
     constructor() {
@@ -42,18 +46,26 @@ export class DatabaseInitiator{
         user.username = "Dennis2";
         user.servingsize = 1;
         user.planday ="Montag";
-        user.password="1234";
-        user.email="test@test.de";
+        user.password="123";
+        user.email="dennis@test.de";
         user.likedRecipes=[];
         await user.save();
 
-        // const user2 = new User();
-        // user.username2 = "Lukas";
-        // user.servingsize = 2;
-        // user.planday ="Dienstag";
-        // user.password="sicher";
-        // user.email="ele@fant.de";
-        // await user2.save();
+        const user2 = new User();
+        user2.username = "Lukas";
+        user2.servingsize = 2;
+        user2.planday ="Dienstag";
+        user2.password="1234";
+        user2.email="lukas@test.de";
+        await user2.save();
+
+        const user3 = new User();
+        user3.username = "Steffen";
+        user3.servingsize = 4;
+        user3.planday ="Mittwoch";
+        user3.password="12345";
+        user3.email="stefen@test.de";
+        await user3.save();
 
 
 
@@ -86,22 +98,72 @@ export class DatabaseInitiator{
         ientry2.ingredient = ingredient2;
         await ientry2.save();
 
+        const dennisFoodplan = new Foodplan();
+        dennisFoodplan.user = user;
+        const date_start = new Date();
+        const date_end = new Date()
+        dennisFoodplan.startDate= date_start;
+        dennisFoodplan.endDate= new Date(date_end.setDate(date_end.getDate() + 7));
+        await dennisFoodplan.save();
 
-        const recipe = new Recipe();
-        recipe.name = "Butterbrot  Liked";
-        recipe.directions = "Brot schneiden";
-        recipe.preparationtime=0;
-        recipe.cookingtime=5;
-        recipe.online = true;
-        recipe.difficulty= "einfach";
-        recipe.datePosted="2021.03.18"
-        recipe.picture= "data:image/jpeg;base64"
-        recipe.author = user;
-        recipe.ingredients= [ientry,ientry2];
-        recipe.tags = [tag]
-        await recipe.save();
 
-        user.likedRecipes.push(recipe);
-        await user.save();
+        const addRecipe = async(amount:number)=>{
+            for(let i=0;i<amount;i++){
+                const recipe = new Recipe();
+                recipe.name = "Butterbrot  Liked"+i.toString();
+                recipe.directions = "Brot schneiden"+i.toString();
+                recipe.preparationtime=0;
+                recipe.cookingtime=5;
+                recipe.online = true;
+                recipe.difficulty= "einfach";
+                recipe.datePosted=
+                recipe.picture= "data:image/jpeg;base64"
+                recipe.author = user;
+                recipe.ingredients= [ientry,ientry2];
+                recipe.tags = [tag]
+                await recipe.save();
+
+                const addCookdays = async (days:number)=>{
+                    for(let i=0;i<days;i++){
+                        const date = new Date()
+                        const cookday = new Cookday();
+                        cookday.day = new Date(date.setDate(date.getDate() + i));
+                        cookday.foodplan = dennisFoodplan;
+                        cookday.recipes =[recipe];
+                        await cookday.save();
+                    }
+
+                }
+
+                if(i%2 !==0){
+                    user.likedRecipes.push(recipe);
+                }
+                if(i%2 !==0){
+                    const commentDennis = new Comment();
+                    commentDennis.author=user;
+                    commentDennis.recipe = recipe;
+                    commentDennis.date="2021.03.20";
+                    commentDennis.text="Echt tolles Rezept ANY:)";
+                    await commentDennis.save();
+                }
+                if(i%10 ===9) {
+                    await addCookdays(7);
+                }
+            }
+        }
+            await user.save();
+        await addRecipe(10);
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

@@ -17,9 +17,9 @@ export class IngredientEntry extends BaseEntity {
     @Column()
     freshness: string;
 
-    @ManyToOne(()=>Recipe, recipe => recipe.ingredients)
+    @ManyToOne(()=>Recipe, recipe => recipe.ingredients,{onDelete: 'CASCADE'})
     recipe: Recipe;
 
-    @ManyToOne(()=>Ingredient, ingredient=>ingredient.ingrediententries)
+    @ManyToOne(()=>Ingredient, ingredient=>ingredient.ingrediententries,{onDelete: 'CASCADE'})
     ingredient: Ingredient;
 }

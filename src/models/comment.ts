@@ -11,8 +11,8 @@ export class Comment extends BaseEntity {
     @Column()
     text: string;
 
-    @Column({type:"date"})
-    date: Date;
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
+    date: string;
 
     @ManyToOne(()=>User,user=>user.createdComments)
     author:User

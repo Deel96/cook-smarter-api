@@ -9,9 +9,9 @@ export class Rating extends BaseEntity {
     id: number;
 
     @Column()
-    stars: string;
+    stars: number;
 
-    @Column({type:"date"})
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
     date: string;
 
     @ManyToOne(()=>User,user => user.createdRatings)

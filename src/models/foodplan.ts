@@ -1,4 +1,11 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToMany, JoinTable, ManyToOne, OneToMany} from "typeorm";
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    BaseEntity,
+    OneToMany,
+    OneToOne, JoinColumn
+} from "typeorm";
 import {User} from "./user";
 import {Grocerylist} from "./grocerylist";
 import {Cookday} from "./cookday";
@@ -9,13 +16,14 @@ export class Foodplan extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({type:"date"})
-    foodplan_start: Date;
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
+    startDate: Date;
 
-    @Column({type:"date"})
-    foodplan_end: Date;
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
+    endDate: Date;
 
-    @ManyToOne(type => User, user => user.foodplans)
+    @OneToOne(type => User, user => user.foodplan)
+    @JoinColumn()
     user: User;
 
     @OneToMany(()=>Grocerylist,grocerylist=>grocerylist.foodplan)
