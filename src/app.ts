@@ -1,14 +1,10 @@
 import  express from 'express';
-import {User} from "./models/user";
 import passport from "passport"
-//import passportLocal from "passport-local"
 import session from "express-session";
 import bodyParser from "body-parser"
 import flash from "connect-flash"
 import {errorMiddleware} from './middlewares/error.middleware';
 import Route from "./interfaces/route.interface";
-
-//import "./config/passport.config";
 
 export class App {
 
