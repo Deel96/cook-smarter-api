@@ -1,6 +1,6 @@
 import {Foodplan} from "../models/foodplan";
 import {User} from "../models/user";
-import HttpException from "../ExceptionTypes/HTTPException";
+import {HttpException} from "../exceptionTypes/HTTPException";
 import {Recipe} from "../models/recipe";
 import {Cookday} from "../models/cookday";
 

@@ -1,5 +1,5 @@
 import {Recipe} from "../models/recipe";
-import HttpException from "../ExceptionTypes/HTTPException";
+import {HttpException} from "../exceptionTypes/HTTPException";
 import {Comment} from "../models/comment";
 import {Rating} from "../models/rating";
 import {User} from "../models/user";
