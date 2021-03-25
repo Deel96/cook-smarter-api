@@ -143,7 +143,7 @@ export class DatabaseInitiator{
                     commentDennis.author=user;
                     commentDennis.recipe = recipe;
                     commentDennis.date="2021.03.20";
-                    commentDennis.text="Echt tolles Rezept ANY:)";
+                    commentDennis.text="Echt tolles Rezept :)";
                     await commentDennis.save();
                 }
                 if(i%10 ===9) {
