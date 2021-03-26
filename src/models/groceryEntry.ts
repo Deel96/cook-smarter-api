@@ -19,9 +19,11 @@ export class GroceryEntry extends BaseEntity {
 
     @Column()
     checked: boolean;
-
-    @ManyToOne(()=>Ingredient, ingredient=>ingredient.groceryentries)
-    ingredient: Ingredient;
+    
+    @Column()
+    name:string;
+    // @ManyToOne(()=>Ingredient, ingredient=>ingredient.groceryentries)
+    // ingredient: Ingredient;
 
     @ManyToOne(()=>Grocerylist, grocerylist=>grocerylist.entries)
     grocerylist: Grocerylist;

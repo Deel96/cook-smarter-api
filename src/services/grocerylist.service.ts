@@ -14,11 +14,11 @@ class GrocerylistService {
 
 
 
-        const foundUser: User = await User.findOne({where: {id: userId},relations:["foodplan"]})
+        const foundUser: User = await User.findOne({where: {id: userId},relations:["foodplan","foodplan.grocerylists"]})
 
         const foundFoodplanId = foundUser.foodplan.id;
 
-        const foundFoodplan = await Foodplan.findOne({where: {id: foundFoodplanId},relations:["grocerylists","grocerylists.entries","grocerylists.entries.ingredient"]})
+        const foundFoodplan = await Foodplan.findOne({where: {id: foundFoodplanId},relations:["grocerylists","grocerylists.entries"]})
 
         //const foundGrocerylists = Grocerylist.find()
         const result =foundFoodplan.grocerylists;

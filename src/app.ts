@@ -1,9 +1,9 @@
-import  express from 'express';
+import express from 'express';
 import passport from "passport"
 import session from "express-session";
 import bodyParser from "body-parser"
 import flash from "connect-flash"
-import {errorMiddleware} from './middlewares/error.middleware';
+import { errorMiddleware } from './middlewares/error.middleware';
 import Route from "./interfaces/route.interface";
 
 export class App {

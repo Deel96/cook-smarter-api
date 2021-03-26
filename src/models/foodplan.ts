@@ -26,7 +26,7 @@ export class Foodplan extends BaseEntity {
     @JoinColumn()
     user: User;
 
-    @OneToMany(()=>Grocerylist,grocerylist=>grocerylist.foodplan)
+    @OneToMany(()=>Grocerylist,grocerylist=>grocerylist.foodplan,{cascade: true})
     grocerylists: Grocerylist[];
 
     @OneToMany(()=>Cookday,cookday=>cookday.foodplan)

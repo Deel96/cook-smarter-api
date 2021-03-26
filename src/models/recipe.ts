@@ -53,7 +53,7 @@ export class Recipe extends BaseEntity {
     @JoinTable()
     tags: Tag[];
 
-    @OneToMany(()=>IngredientEntry, ingredientEntry => ingredientEntry.recipe,{onDelete: 'CASCADE'})
+    @OneToMany(()=>IngredientEntry, ingredientEntry => ingredientEntry.recipe,{onDelete: 'CASCADE', cascade: true })
     ingredients: IngredientEntry[];
 
     @OneToMany(()=>Comment, comment => comment.recipe,{onDelete: 'CASCADE'})
