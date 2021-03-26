@@ -6,15 +6,24 @@ import {User} from "../models/user";
 import {Comment} from "../models/comment"
 import common from "mocha/lib/interfaces/common";
 import {Rating} from "../models/rating";
+import { HttpException } from '../exceptionTypes/httpException';
 
 class RecipeController {
     public recipeService = new RecipeService();
     //Return all recipes of the database
     public getAllRecipes = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+
+
+
             const findAllRecipeDate: Recipe[] = await this.recipeService.getAllRecipes();
 
+
+
             res.status(200).json({ data: findAllRecipeDate, message: 'findAll' });
+
+
+
         } catch (error) {
             next(error);
         }
@@ -35,7 +44,9 @@ class RecipeController {
     //Gets all recipes from the user that he owns
     public getAllRecipesFromLoggedInUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+            
             const user : User = req.user as User;
+            if(!user) throw new HttpException(404,"User not found");
             const userId = Number(user.id);
 
             const foundRecipes: Recipe[] = await this.recipeService.getAllRecipesFromLoggedInUser(userId);
@@ -80,7 +91,7 @@ class RecipeController {
             const user : User = req.user as User;
             const userId = Number(user.id);
             const recipeData: Recipe = req.body;
-            const recipeId = Number(req.params.recipeId);
+            const recipeId = Number(req.params.id);
             const createdRecipeData: Recipe = await this.recipeService.updateRecipe(userId,recipeId,recipeData);
 
             res.status(200).json({ data: createdRecipeData, message: 'updateRecipe' });

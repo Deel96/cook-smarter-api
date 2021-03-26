@@ -19,10 +19,10 @@ export class User extends BaseEntity {
     @Column()
     password: string;
 
-    @Column()
+    @Column({default:1})
     servingsize: number;
 
-    @Column()
+    @Column({default:"Montag"})
     planday: string;
 
     @OneToOne(type => Foodplan, foodplan => foodplan.user)

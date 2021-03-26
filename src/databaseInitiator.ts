@@ -166,4 +166,34 @@ export class DatabaseInitiator{
 
 
     }
+
+
+    async createIngredients(){
+        const ingredients = 
+        [
+        await new Ingredient("Nudeln").save(),
+        await new Ingredient("Brot").save(),
+        await new Ingredient("Brot").save(),
+        await new Ingredient("Brot").save(),
+        await new Ingredient("Brot").save(),
+        await new Ingredient("Brot").save(),
+        await new Ingredient("Brot").save(),
+        await new Ingredient("Brot").save(),
+        await new Ingredient("Brot").save(),
+        await new Ingredient("Brot").save(),
+        await new Ingredient("Brot").save(),
+
+        ]
+
+
+
+        const ingredient2 = new Ingredient();
+        ingredient2.name="Butter";
+        await ingredient2.save();
+
+
+        return [
+            new Ingredient().name="Nudeln"
+        ]
+    }
 }

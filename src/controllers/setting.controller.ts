@@ -6,7 +6,7 @@ import {Foodplan} from "../models/foodplan";
 import FoodplanService from "../services/foodplan.service";
 import {Cookday} from "../models/cookday";
 
-class FoodplanController {
+class SettingController {
     public foodplanService = new FoodplanService();
 
     //Return the current foodplan

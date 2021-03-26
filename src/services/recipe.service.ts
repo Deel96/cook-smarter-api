@@ -3,7 +3,6 @@ import {HttpException} from "../exceptionTypes/httpException";
 import {Comment} from "../models/comment";
 import {Rating} from "../models/rating";
 import {User} from "../models/user";
-import {now} from "../util/timeGetter"
 import {RatingInfo} from "../models/DTOs/rating";
 class RecipeService {
 
@@ -68,9 +67,11 @@ class RecipeService {
         const foundRecipe: Recipe = await Recipe.findOne({where: {id: recipeId}});
         if (!foundRecipe) throw new HttpException(404, `Recipe with Id: ${recipeId} not found under User with Id: ${userId}`);
 
-        await Recipe.update(recipeId,recipe);
-
-        return foundRecipe;
+       //let test =  await Recipe.update(recipeId,recipe);
+        recipe.id = foundRecipe.id;
+        let test =  await Recipe.save(recipe);
+        console.log(test);
+        return test;
     }
 
     //deletes a recipe by Id

@@ -1,8 +1,5 @@
 import {Request, Router} from 'express';
-import RecipeController from '../controllers/recipe.controller';
-import {User} from "../models/user";
 import passport from "passport";
-import {Recipe} from "../models/recipe";
 import AuthController from "../controllers/auth.controller";
 
 class AuthRoute {
@@ -16,8 +13,8 @@ class AuthRoute {
 
     private initializeRoutes() {
         this.router.post("/login2", passport.authenticate('local'),this.authController.login);
-        //this.router.post("/logout", this.recipeController.addRecipe);
-        //this.router.post(`/register`, this.recipeController.get);
+        this.router.post("/logout", this.authController.logout);
+        this.router.post(`/register`, this.authController.register);
 
 
         };

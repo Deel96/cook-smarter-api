@@ -5,10 +5,8 @@ import RecipeRoute from "./routes/recipe.route";
 import {DatabaseInitiator} from "./databaseInitiator";
 import AuthRoute from "./routes/auth.route";
 import FoodplanRoute from "./routes/foodplan.route";
-import GrocerylistController from "./controllers/grocerylist.controller";
 import GrocerylistRoute from "./routes/grocerylist.route";
 const port = process.env.PORT || 3000;
-const recipeRoute = new RecipeRoute();
 const app = new App([new RecipeRoute(), new AuthRoute(), new FoodplanRoute(), new GrocerylistRoute]);
 
 
@@ -16,7 +14,8 @@ const app = new App([new RecipeRoute(), new AuthRoute(), new FoodplanRoute(), ne
 
 const dataBaseInitiator = new DatabaseInitiator();
 
-dataBaseInitiator.initDataBase(false,false).then(
+const drop = false;
+dataBaseInitiator.initDataBase(drop,drop).then(
 
 app.express.listen(port, (err) => {
     if (err) {
@@ -24,9 +23,17 @@ app.express.listen(port, (err) => {
         process.abort();
     }
     console.log(`Server is listening on port ${port}.`);
+
+
+    app.express.post("/initDb",(req,res)=>{
+        dataBaseInitiator.createEntities();
+        res.send("db initialized");
+    });
+
+
     return;
 })
 
+
 )
 
-//test

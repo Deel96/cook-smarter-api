@@ -2,9 +2,10 @@ import {User} from "../models/user";
 import {HttpException} from "../exceptionTypes/httpException";
 import {Recipe} from "../models/recipe";
 import {Grocerylist} from "../models/grocerylist";
+import { Foodplan } from "../models/foodplan";
 
 
-class GrocerylistService2 {
+class GrocerylistService {
 
     //Return all grocerylists of a given foodplan
     public async getAllGrocerylistsFromFoodplan(userId:number): Promise<Grocerylist[]> {
@@ -15,9 +16,13 @@ class GrocerylistService2 {
 
         const foundUser: User = await User.findOne({where: {id: userId},relations:["foodplan"]})
 
+        const foundFoodplanId = foundUser.foodplan.id;
+
+        const foundFoodplan = await Foodplan.findOne({where: {id: foundFoodplanId},relations:["grocerylists","grocerylists.entries","grocerylists.entries.ingredient"]})
+
         //const foundGrocerylists = Grocerylist.find()
-       // const result = await Grocerylist.find({where:{id: userId,foodplanId : foodplanId},relations:["supermarket","entries"]});
-        return null;
+        const result =foundFoodplan.grocerylists;
+        return result;
     }
 
     //Returns one grocerylists of a given foodplan
@@ -44,7 +49,7 @@ class GrocerylistService2 {
 
 
 }
-export default GrocerylistService2;
+export default GrocerylistService;
 
 
 //TODO Controller / Routes

@@ -1,8 +1,6 @@
 import {Request, Router} from 'express';
 import RecipeController from '../controllers/recipe.controller';
-import {User} from "../models/user";
-import * as passport from "passport";
-import {Recipe} from "../models/recipe";
+
 
 class RecipeRoute {
     //public path = '/recipes';
@@ -20,7 +18,7 @@ class RecipeRoute {
         this.router.get("/me/recipes", this.recipeController.getAllRecipesFromLoggedInUser);
         this.router.post("/me/recipes", this.recipeController.addRecipe);
         this.router.get("/me/favorites", this.recipeController.getFavorites);
-        this.router.put("/me/recipes/", this.recipeController.getAllRecipesFromLoggedInUser);
+        this.router.put("/me/recipes/:id", this.recipeController.updateRecipe);
         this.router.delete("/me/recipes/:id", this.recipeController.deleteRecipeById);
 
         this.router.post("/me/favorites", this.recipeController.addFavorite);

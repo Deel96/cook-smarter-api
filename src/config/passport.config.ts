@@ -4,6 +4,7 @@ import passport from "passport";
 import { Request, Response, NextFunction } from "express";
 import {User} from "../models/user";
 import passportLocal from "passport-local";
+import { HttpException } from "../exceptionTypes/httpException";
 
 
 passport.serializeUser((user:User, done)=> {
@@ -12,6 +13,7 @@ passport.serializeUser((user:User, done)=> {
 
 passport.deserializeUser(async (id, done) =>{
     const foundUser = await User.findOne(id);
+    if(!foundUser)return done(new HttpException(404,"User not found"))
     done(null, foundUser);
 });
 
@@ -24,7 +26,10 @@ passport.use(new passportLocal.Strategy({
     async (email, password, done) =>{
         const test = password;
         const foundUser = await User.findOne({email:email, password:password});
-        console.log(foundUser.likedRecipes);
+        //if(!foundUser) throw new HttpException(404,"User not found");
+        if(!foundUser) return done(new HttpException(404,"User not found"));
+
+        //return done("upsi");
         return done(null, foundUser);
     }
 ));

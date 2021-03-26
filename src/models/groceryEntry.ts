@@ -15,7 +15,7 @@ export class GroceryEntry extends BaseEntity {
     amount: number;
 
     @Column()
-    freshness: number;
+    freshness: string;
 
     @Column()
     checked: boolean;

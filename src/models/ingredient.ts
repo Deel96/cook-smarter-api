@@ -5,6 +5,11 @@ import {GroceryEntry} from "./groceryEntry";
 @Entity()
 export class Ingredient extends BaseEntity {
 
+    constructor(name:string){
+        super();
+        name= name;
+    }
+
     @PrimaryGeneratedColumn()
     id: number;
 
