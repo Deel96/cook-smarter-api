@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \" no test specified\" && exit 0",
     "build": "rimraf build && tsc",
-    "start": "ts-node src/index.ts",
+    "start": "ts-node src/index.ts -V",
     "serve": "nodemon --exec ts-node src/index.ts",
     "postinstall": "tsc"
   },
