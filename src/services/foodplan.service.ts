@@ -6,8 +6,10 @@ import {Cookday} from "../models/cookday";
 import { Ingredient } from "../models/ingredient";
 import { Any } from "typeorm";
 import { IngredientEntry } from "../models/ingredientEntry";
-import { reduceEachLeadingCommentRange } from "typescript";
+import { flattenDiagnosticMessageText, reduceEachLeadingCommentRange } from "typescript";
 import { GroceryEntry } from "../models/groceryEntry";
+import e from "express";
+import { Grocerylist } from "../models/grocerylist";
 
 
 class FoodplanService {
@@ -50,7 +52,16 @@ class FoodplanService {
        
         foundCookday.recipes.push(foundRecipe);
         await foundCookday.save();
-        await this.updateGrocerylist(foundUser.foodplan)
+        const entries = await this.updateGrocerylist(foundUser.foodplan)
+        
+        const gl = new Grocerylist();
+        gl.entries =entries;
+
+        foundUser.foodplan.grocerylists = [gl];
+
+        await foundUser.foodplan.save();
+
+        await foundUser.save();
         return "Added Recipe to Cookday";
 
     }
@@ -80,8 +91,9 @@ class FoodplanService {
 
 
     private async initFoodplan(){
-
-        const result = await new Foodplan();
+        
+        const result = new Foodplan();
+        result.cookdays=[];
         const date_start = new Date();
         const date_end = new Date()
         result.startDate = date_start
@@ -93,8 +105,9 @@ class FoodplanService {
                 const date = new Date()
                 const cookday = new Cookday();
                 cookday.day = new Date(date.setDate(date.getDate() + i));
-                cookday.foodplan = result;
+                //cookday.foodplan = result;
                 cookday.recipes =[];
+                result.cookdays.push(cookday);
                 await cookday.save();
             }
         }
@@ -106,13 +119,25 @@ class FoodplanService {
     private async updateGrocerylist(foodplan:Foodplan):Promise<GroceryEntry[]>{
 
         const res :GroceryEntry[] = [];
-        const cookdays = await Cookday.find({where: {foodplan: foodplan},relations:["recipes","recipes.ingredients","recipes.ingredients.ingredient"]});
+        const cookdays = await Cookday.find({where: {foodplan: foodplan},relations:["recipes","recipes.ingredients"]});
         for(const cookday of cookdays){
             for(const recipe of cookday.recipes){
                 for(const ingredientEntry of recipe.ingredients){
                     const item = GroceryEntry.create(ingredientEntry);
-                    item.checked= false;
-                    res.push(item);
+                    item.checked = false;
+                    let found = false;
+                    for(const element of res){
+                        if(item.name === element.name && item.unit === element.unit && element.freshness === item.freshness){
+                            element.amount+= item.amount
+                            found = true;
+                                break;
+                        }
+                    }
+                        if(!found){ 
+                            res.push(item);
+                            item.save();
+                        }
+                    
                 }
             }
         }
