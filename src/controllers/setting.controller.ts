@@ -56,4 +56,4 @@ class SettingController {
 
 }
 
-export default FoodplanController;
+export default SettingController;
