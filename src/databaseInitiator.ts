@@ -5,7 +5,7 @@ import {Recipe} from "./models/recipe";
 import {Connection, ConnectionOptions, createConnection} from "typeorm";
 import {Tag} from "./models/tag";
 import {IngredientEntry} from "./models/ingredientEntry";
-import {Ingredient} from "./models/ingredient";
+//import {Ingredient} from "./models/ingredient";
 import {Foodplan} from "./models/foodplan";
 import {now} from "./util/timeGetter";
 import {Cookday} from "./models/cookday";
@@ -74,20 +74,21 @@ export class DatabaseInitiator{
         tag.description ="Speisen, die kalt gegessen werden."
         await tag.save();
 
-        const ingredient = new Ingredient();
-        ingredient.name="Brot";
-        await ingredient.save();
+        // const ingredient = new Ingredient();
+        // ingredient.name="Brot";
+        // await ingredient.save();
 
-        const ingredient2 = new Ingredient();
-        ingredient2.name="Butter";
-        await ingredient2.save();
+        // const ingredient2 = new Ingredient();
+        // ingredient2.name="Butter";
+        // await ingredient2.save();
 
         //Brot
         const ientry = new IngredientEntry();
         ientry.amount=100;
         ientry.unit="g";
         ientry.freshness="frisch";
-        ientry.ingredient = ingredient;
+        ientry.name="Brot"
+        //ientry.ingredient = ingredient;
         await ientry.save();
 
         //Butter
@@ -95,7 +96,8 @@ export class DatabaseInitiator{
         ientry2.amount=10;
         ientry2.unit="g";
         ientry2.freshness="verpackt";
-        ientry2.ingredient = ingredient2;
+        ientry2.name= "Butter";
+        //ientry2.ingredient = ingredient2;
         await ientry2.save();
 
         const dennisFoodplan = new Foodplan();
@@ -171,29 +173,29 @@ export class DatabaseInitiator{
     async createIngredients(){
         const ingredients = 
         [
-        await new Ingredient("Nudeln").save(),
-        await new Ingredient("Brot").save(),
-        await new Ingredient("Brot").save(),
-        await new Ingredient("Brot").save(),
-        await new Ingredient("Brot").save(),
-        await new Ingredient("Brot").save(),
-        await new Ingredient("Brot").save(),
-        await new Ingredient("Brot").save(),
-        await new Ingredient("Brot").save(),
-        await new Ingredient("Brot").save(),
-        await new Ingredient("Brot").save(),
+        await new IngredientEntry("Nudeln").save(),
+        await new IngredientEntry("Brot").save(),
+        await new IngredientEntry("Brot").save(),
+        await new IngredientEntry("Brot").save(),
+        await new IngredientEntry("Brot").save(),
+        await new IngredientEntry("Brot").save(),
+        await new IngredientEntry("Brot").save(),
+        await new IngredientEntry("Brot").save(),
+        await new IngredientEntry("Brot").save(),
+        await new IngredientEntry("Brot").save(),
+        await new IngredientEntry("Brot").save(),
 
         ]
 
 
 
-        const ingredient2 = new Ingredient();
+        const ingredient2 = new IngredientEntry();
         ingredient2.name="Butter";
         await ingredient2.save();
 
 
         return [
-            new Ingredient().name="Nudeln"
+            new IngredientEntry().name="Nudeln"
         ]
     }
 }
