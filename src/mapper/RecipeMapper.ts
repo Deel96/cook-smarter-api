@@ -33,8 +33,9 @@ export class RecipeMapper{
 private calcRatingOfRecipe(recipe:Recipe):RatingInfoDTO{
     //if(!recipe.rating) return new RatingInfo();
     const length = recipe.ratings?.length;
+    if(!length){return {rating:0,votes:0} }
     let sum =0;
-    for(const rating of recipe.ratings){
+    for(const rating of recipe?.ratings){
         sum+= rating.stars;
     }
     const finalRating : RatingInfoDTO = {rating:0,votes:0};
@@ -50,7 +51,8 @@ private calcRatingOfRecipe(recipe:Recipe):RatingInfoDTO{
 private insertIngredients(recipe:Recipe):IngredientEntryDTO[]{
     
         const allIngredients = [];
-        for(const item of recipe.ingredients){
+        if(!recipe.ingredients) {return allIngredients}
+        for(const item of recipe?.ingredients){
             const result: IngredientEntryDTO = this.ingredientEntryMapper.toDTO(item);
             allIngredients.push(result);
         }

@@ -12,7 +12,7 @@ export class Comment extends BaseEntity {
     text: string;
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
-    date: string;
+    date: Date;
 
     @ManyToOne(()=>User,user=>user.createdComments)
     author:User

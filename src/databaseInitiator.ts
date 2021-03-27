@@ -144,7 +144,7 @@ export class DatabaseInitiator{
                     const commentDennis = new Comment();
                     commentDennis.author=user;
                     commentDennis.recipe = recipe;
-                    commentDennis.date="2021.03.20";
+                    commentDennis.date=new Date();
                     commentDennis.text="Echt tolles Rezept :)";
                     await commentDennis.save();
                 }

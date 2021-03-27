@@ -7,6 +7,7 @@ import { RecipePreviewDTO } from "../models/DTOs/recipe-preview.dto";
 import { RecipePreviewMapper } from "../mapper/RecipePreviewMapper";
 import { RecipeMapper } from "../mapper/RecipeMapper";
 import { RecipeDTO } from "../models/DTOs/recipe.dto";
+import { CommentDTO } from "../models/DTOs/comment.dto";
 class RecipeService {
 
     private recipePreviewMapper = new RecipePreviewMapper();
@@ -85,7 +86,7 @@ class RecipeService {
     //Returns the favorites of the logged in User-
     public async getFavorites(userId:number): Promise<RecipePreviewDTO[]> {
         const foundUser: User = await User.findOne({
-            where: {id: userId},relations:["likedRecipes","likedRecipes.ratings","likedRecipes.author"]
+            where: {id: userId},relations:["likedRecipes","likedRecipes.ratings","likedRecipes.author","likedRecipes.tags"]
         })
         if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
         const favorites = foundUser.likedRecipes;
@@ -103,15 +104,12 @@ class RecipeService {
         const foundUser: User = await User.findOne({where: {id: userId}})
         if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
 
-        const foundRecipe: Recipe = await Recipe.findOne({where: {id: recipeId}});
+        let foundRecipe: Recipe = await Recipe.findOne({where: {id: recipeId},relations:["ingredients"]});
         if (!foundRecipe) throw new HttpException(404, `Recipe with Id: ${recipeId} not found under User with Id: ${userId}`);
 
-       //let test =  await Recipe.update(recipeId,recipe);
-               //recipe.id = foundRecipe.id;
-        //let test =  await Recipe.save(recipe);
-
-
-        const newRecipe = await Recipe.save({
+        recipeData.datePosted= new Date();
+        recipeData.id = recipeId;
+         foundRecipe = await Recipe.save({
             id:recipeId,
             name: recipeData.name,
             picture:recipeData.picture,
@@ -119,14 +117,16 @@ class RecipeService {
             preparationtime : recipeData.preparationtime,
             cookingtime:recipeData.cookingtime,
             difficulty: recipeData.difficulty,
-            datePosted: new Date(),
+            datePosted: recipeData.datePosted,
             online: recipeData.online,
             tags:recipeData.tags,
             author: foundUser
         }as Recipe);
+        
+        await foundRecipe.save();
+        const result = this.recipeMapper.toDTO(foundRecipe)
 
-        console.log(newRecipe);
-        return null;
+        return result;
     }
 
     //deletes a recipe by Id
