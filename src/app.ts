@@ -41,11 +41,11 @@ export class App {
         this.express.use(passport.session());
         this.express.use(flash());
 
-        this.express.post('/login',
-            passport.authenticate('local'), function(req,res){
-                res.send('Hello login!')
-            }
-        );
+        // this.express.post('/login',
+        //     passport.authenticate('local'), function(req,res){
+        //         res.send('Hello login!')
+        //     }
+        // );
 
 
     }
