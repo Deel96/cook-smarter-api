@@ -14,7 +14,7 @@ const app = new App([new RecipeRoute(), new AuthRoute(), new FoodplanRoute(), ne
 
 const dataBaseInitiator = new DatabaseInitiator();
 
-const drop = true;
+const drop = false;
 dataBaseInitiator.initDataBase(drop,drop).then(
 
 app.express.listen(port, (err) => {

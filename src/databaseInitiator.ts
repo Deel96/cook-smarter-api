@@ -118,7 +118,7 @@ export class DatabaseInitiator{
                 recipe.cookingtime=5;
                 recipe.online = true;
                 recipe.difficulty= "einfach";
-                recipe.datePosted=
+                //recipe.datePosted=
                 recipe.picture= "data:image/jpeg;base64"
                 recipe.author = user;
                 recipe.ingredients= [ientry,ientry2];

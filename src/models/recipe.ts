@@ -14,7 +14,7 @@ import {IngredientEntry} from "./ingredientEntry";
 import {User} from "./user";
 import {Rating} from "./rating";
 import {Comment} from "./comment";
-import {RatingInfo} from "./DTOs/rating";
+import {RatingInfoDTO} from "./DTOs/rating";
 
 @Entity()
 export class Recipe extends BaseEntity {
@@ -38,7 +38,7 @@ export class Recipe extends BaseEntity {
     difficulty: string;
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
-    datePosted: string;
+    datePosted: Date;
 
     @Column()
     online: boolean;
@@ -62,7 +62,7 @@ export class Recipe extends BaseEntity {
     @OneToMany(()=>Rating, rating => rating.recipe,{onDelete: 'CASCADE'})
     ratings: Rating[];
 
-    rating: RatingInfo
+    rating: RatingInfoDTO
 
 
 }

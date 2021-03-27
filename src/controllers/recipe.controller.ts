@@ -7,23 +7,16 @@ import {Comment} from "../models/comment"
 import common from "mocha/lib/interfaces/common";
 import {Rating} from "../models/rating";
 import { HttpException } from '../exceptionTypes/httpException';
+import { RecipePreviewDTO } from '../models/DTOs/recipe-preview.dto';
+import { RecipeDTO } from '../models/DTOs/recipe.dto';
 
 class RecipeController {
     public recipeService = new RecipeService();
     //Return all recipes of the database
     public getAllRecipes = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-
-
-
-            const findAllRecipeDate: Recipe[] = await this.recipeService.getAllRecipes();
-
-
-
-            res.status(200).json({ data: findAllRecipeDate, message: 'findAll' });
-
-
-
+            const findAllRecipeDate: RecipePreviewDTO[] = await this.recipeService.getAllRecipes();
+            res.status(200).json({ data: findAllRecipeDate, message: 'getAllRecipes' });
         } catch (error) {
             next(error);
         }
@@ -33,7 +26,7 @@ class RecipeController {
     public getRecipeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const recipeId = Number(req.params.id);
-            const recipeData: Recipe = await this.recipeService.getRecipeById(recipeId);
+            const recipeData: RecipeDTO = await this.recipeService.getRecipeById(recipeId);
 
             res.status(200).json({ data: recipeData, message: 'findRecipeById' });
         } catch (error) {
@@ -46,10 +39,10 @@ class RecipeController {
         try {
             
             const user : User = req.user as User;
-            if(!user) throw new HttpException(404,"User not found");
+            if(!user) throw new HttpException(401,"User not found");
             const userId = Number(user.id);
 
-            const foundRecipes: Recipe[] = await this.recipeService.getAllRecipesFromLoggedInUser(userId);
+            const foundRecipes: RecipePreviewDTO[] = await this.recipeService.getAllRecipesFromLoggedInUser(userId);
 
             res.status(200).json({ data: foundRecipes, message: 'getAllRecipesFromLoggedInUser' });
         } catch (error) {
@@ -62,8 +55,8 @@ class RecipeController {
         try {
             const user : User = req.user as User;
             const userId = Number(user.id);
-            const recipeData: Recipe = req.body;
-            const createdRecipeData: Recipe = await this.recipeService.addRecipe(userId,recipeData);
+            const recipeData: RecipeDTO = req.body;
+            const createdRecipeData: RecipeDTO = await this.recipeService.addRecipe(userId,recipeData);
 
             res.status(200).json({ data: createdRecipeData, message: 'addRecipe' });
         } catch (error) {
@@ -77,7 +70,7 @@ class RecipeController {
             const user : User = req.user as User;
             const userId = Number(user.id);
 
-            const recipeData: Recipe[] = await this.recipeService.getFavorites(userId);
+            const recipeData: RecipePreviewDTO[] = await this.recipeService.getFavorites(userId);
 
             res.status(200).json({ data: recipeData, message: 'getFavorites' });
         } catch (error) {
@@ -90,9 +83,9 @@ class RecipeController {
         try {
             const user : User = req.user as User;
             const userId = Number(user.id);
-            const recipeData: Recipe = req.body;
+            const recipeData: RecipeDTO = req.body;
             const recipeId = Number(req.params.id);
-            const createdRecipeData: Recipe = await this.recipeService.updateRecipe(userId,recipeId,recipeData);
+            const createdRecipeData: RecipeDTO = await this.recipeService.updateRecipe(userId,recipeId,recipeData);
 
             res.status(200).json({ data: createdRecipeData, message: 'updateRecipe' });
         } catch (error) {

@@ -3,7 +3,6 @@ import {User} from "../models/user";
 import {HttpException} from "../exceptionTypes/httpException";
 import {Recipe} from "../models/recipe";
 import {Cookday} from "../models/cookday";
-import { Ingredient } from "../models/ingredient";
 import { Any } from "typeorm";
 import { IngredientEntry } from "../models/ingredientEntry";
 import { flattenDiagnosticMessageText, reduceEachLeadingCommentRange } from "typescript";

@@ -6,11 +6,14 @@ import flash from "connect-flash"
 import { errorMiddleware } from './middlewares/error.middleware';
 import Route from "./interfaces/route.interface";
 
+import cors from "cors";
+
 export class App {
 
     public express;
     constructor(routes:Route[]) {
         this.express = express();
+        this.express.use(cors({credentials: true, origin: 'http://127.0.0.1:5500'}));
         this.initPassport();
         this.mountRoutes(routes);
 

@@ -13,7 +13,7 @@ passport.serializeUser((user:User, done)=> {
 
 passport.deserializeUser(async (id, done) =>{
     const foundUser = await User.findOne(id);
-    if(!foundUser)return done(new HttpException(404,"User not found"))
+    if(!foundUser)return done(new HttpException(401,"User not found"))
     done(null, foundUser);
 });
 
@@ -27,7 +27,7 @@ passport.use(new passportLocal.Strategy({
         const test = password;
         const foundUser = await User.findOne({email:email, password:password});
         //if(!foundUser) throw new HttpException(404,"User not found");
-        if(!foundUser) return done(new HttpException(404,"User not found"));
+        if(!foundUser) return done(new HttpException(401,"User not found"));
 
         //return done("upsi");
         return done(null, foundUser);

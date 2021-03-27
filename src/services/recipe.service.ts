@@ -3,64 +3,104 @@ import {HttpException} from "../exceptionTypes/httpException";
 import {Comment} from "../models/comment";
 import {Rating} from "../models/rating";
 import {User} from "../models/user";
-import {RatingInfo} from "../models/DTOs/rating";
+import { RatingInfoDTO } from "../models/DTOs/rating";
+import { RecipePreviewDTO } from "../models/DTOs/recipe-preview.dto";
+import { RecipePreviewMapper } from "../mapper/RecipePreviewMapper";
+import { RecipeMapper } from "../mapper/RecipeMapper";
+import { RecipeDTO } from "../models/DTOs/recipe.dto";
 class RecipeService {
 
-    //Return all recipes of the database
-    public async getAllRecipes(): Promise<Recipe[]> {
+    private recipePreviewMapper = new RecipePreviewMapper();
+    private recipeMapper = new RecipeMapper();
+    constructor(){
 
-        let result = await Recipe.find({relations:["tags","ratings"]});
+    }
 
-        for(const entry of result){
-            const finalRating = this.calcRatingOfRecipe(entry);
-            entry.rating= finalRating;
+    //Return all recipes of the database-
+    public async getAllRecipes(): Promise<RecipePreviewDTO[]> {
+        const foundRecipes : Recipe[] = await Recipe.find({relations:["author","tags","ratings"]});
+        const allRecipes = [];
+        for(const item of foundRecipes){
+            const result: RecipePreviewDTO = this.recipePreviewMapper.toDTO(item);
+            allRecipes.push(result);
         }
+         
+        return allRecipes;
+    }
+  
+
+    //Gets a recipe by Id-
+    public async getRecipeById(recipeId: number): Promise<RecipeDTO> {
+        const foundrecipe: Recipe = await Recipe.findOneOrFail({where:{id:recipeId},relations:["author","tags","ingredients","ratings"]});
+        const result: RecipeDTO = this.recipeMapper.toDTO(foundrecipe);
         return result;
-    }
-
-    //Gets a recipe by Id
-    public async getRecipeById(recipeId: number): Promise<Recipe> {
-        const foundrecipe: Recipe = await Recipe.findOneOrFail({relations:["author","tags","ingredients","ingredients.ingredient","ratings"]});
-
-        const finalRating = this.calcRatingOfRecipe(foundrecipe);
-        foundrecipe.rating= finalRating;
-        return foundrecipe;
 
     }
 
-    //Gets all recipes from the user that he owns
-    public async getAllRecipesFromLoggedInUser(userId: number): Promise<Recipe[]> {
-        const foundrecipes: Recipe[] = await Recipe.find({where: {author: userId}});
+    //Gets all recipes from the user that he owns-
+    public async getAllRecipesFromLoggedInUser(userId: number): Promise<RecipePreviewDTO[]> {
+        const foundRecipes: Recipe[] = await Recipe.find({where: {author: userId},relations:["author","tags","ratings"]});
+        const allRecipes = [];
 
-        return foundrecipes;
+        for(const item of foundRecipes){
+            const result: RecipePreviewDTO = this.recipePreviewMapper.toDTO(item);
+            allRecipes.push(result);
+        }
+        
+        return allRecipes;
     }
 
-    //Adds an recipe to the database
-    public async addRecipe(userId: number, recipeData: Recipe): Promise<Recipe> {
+    //Adds an recipe to the database-
+    public async addRecipe(userId: number, recipeData: RecipeDTO): Promise<RecipeDTO> {
         const foundUser: User = await User.findOne({
             where: {id: userId},
             relations:["createdRecipes"]
         })
         if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
 
-        const newRecipe = Recipe.create(recipeData);
-        newRecipe.author = foundUser;
+        
+        recipeData.datePosted= new Date();
+        recipeData.author= foundUser.username;
+        recipeData.rating = {rating:0,votes:0}
+
+        const newRecipe = Recipe.create({
+            name: recipeData.name,
+            picture:recipeData.picture,
+            directions:recipeData.directions,
+            preparationtime : recipeData.preparationtime,
+            cookingtime:recipeData.cookingtime,
+            difficulty: recipeData.difficulty,
+            datePosted: recipeData.datePosted,
+            online: recipeData.online,
+            tags:recipeData.tags,
+            author: foundUser,
+            ingredients:recipeData.ingredients,
+            rating: recipeData.rating
+        });
+
         await newRecipe.save();
-        return newRecipe;
+        recipeData.id= newRecipe.id;
+        return recipeData;
     }
 
-    //Returns the favorites of the logged in User
-    public async getFavorites(userId:number): Promise<Recipe[]> {
+    //Returns the favorites of the logged in User-
+    public async getFavorites(userId:number): Promise<RecipePreviewDTO[]> {
         const foundUser: User = await User.findOne({
-            where: {id: userId},relations:["likedRecipes"]
+            where: {id: userId},relations:["likedRecipes","likedRecipes.ratings","likedRecipes.author"]
         })
         if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
         const favorites = foundUser.likedRecipes;
-        return favorites;
+
+        const allRecipes = [];
+        for(const item of favorites){
+            const result: RecipePreviewDTO = this.recipePreviewMapper.toDTO(item);
+            allRecipes.push(result);
+        }
+        return allRecipes;
     }
 
     //Updates a recipe with given attributes
-    public async updateRecipe(userId:number,recipeId:number, recipe: Recipe): Promise<Recipe> {
+    public async updateRecipe(userId:number,recipeId:number, recipeData: RecipeDTO): Promise<RecipeDTO> {
         const foundUser: User = await User.findOne({where: {id: userId}})
         if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
 
@@ -68,10 +108,26 @@ class RecipeService {
         if (!foundRecipe) throw new HttpException(404, `Recipe with Id: ${recipeId} not found under User with Id: ${userId}`);
 
        //let test =  await Recipe.update(recipeId,recipe);
-        recipe.id = foundRecipe.id;
-        let test =  await Recipe.save(recipe);
-        console.log(test);
-        return test;
+               //recipe.id = foundRecipe.id;
+        //let test =  await Recipe.save(recipe);
+
+
+        const newRecipe = await Recipe.save({
+            id:recipeId,
+            name: recipeData.name,
+            picture:recipeData.picture,
+            directions:recipeData.directions,
+            preparationtime : recipeData.preparationtime,
+            cookingtime:recipeData.cookingtime,
+            difficulty: recipeData.difficulty,
+            datePosted: new Date(),
+            online: recipeData.online,
+            tags:recipeData.tags,
+            author: foundUser
+        }as Recipe);
+
+        console.log(newRecipe);
+        return null;
     }
 
     //deletes a recipe by Id
@@ -105,7 +161,7 @@ class RecipeService {
         const foundUser: User = await User.findOne({where: {id: userId},relations:["likedRecipes"]})
         if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
 
-        const foundRecipe = await Recipe.findOne({where: {id: recipeId, author:foundUser}});
+        const foundRecipe = await Recipe.findOne({where: {id: recipeId}});
         if (!foundRecipe) throw new HttpException(404, `Recipe with Id: ${recipeId} not found under User with Id: ${userId}`);
 
 
@@ -169,23 +225,5 @@ class RecipeService {
 
         return newRating;
     }
-
-    private calcRatingOfRecipe(recipe:Recipe):RatingInfo{
-        const length = recipe.ratings.length;
-        let sum =0;
-        for(const rating of recipe.ratings){
-            sum+= rating.stars;
-        }
-        const finalRating = new RatingInfo();
-        if(length>0){
-            finalRating.rating= sum/length;
-        }else{
-            finalRating.rating =0;
-        }
-        finalRating.votes= length;
-
-        return finalRating;
-    }
-
 }
 export default RecipeService;
