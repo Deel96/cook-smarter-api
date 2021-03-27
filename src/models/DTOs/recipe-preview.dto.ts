@@ -1,4 +1,4 @@
-import { RatingInfoDTO } from "./rating";
+import { RatingInfoDTO } from "./rating-info.dto";
 import { TagDTO } from "./tag.dto";
 
 export interface RecipePreviewDTO{

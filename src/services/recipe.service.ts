@@ -3,7 +3,6 @@ import {HttpException} from "../exceptionTypes/httpException";
 import {Comment} from "../models/comment";
 import {Rating} from "../models/rating";
 import {User} from "../models/user";
-import { RatingInfoDTO } from "../models/DTOs/rating-info.dto";
 import { RecipePreviewDTO } from "../models/DTOs/recipe-preview.dto";
 import { RecipePreviewMapper } from "../mapper/RecipePreviewMapper";
 import { RecipeMapper } from "../mapper/RecipeMapper";
