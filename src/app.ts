@@ -13,7 +13,9 @@ export class App {
     public express;
     constructor(routes:Route[]) {
         this.express = express();
-        this.express.use(cors({credentials: true, origin: true}));
+        this.express.use(cors({credentials: true, origin: function (origin, callback) {
+              callback(null, true);
+          }}));
 
 
         this.initPassport();
