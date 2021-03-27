@@ -1,5 +1,5 @@
 export interface IngredientEntryDTO {
-    id: number;
+    id?: number;
     name:string
     amount: number;
     unit: string;

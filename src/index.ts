@@ -14,7 +14,7 @@ const app = new App([new RecipeRoute(), new AuthRoute(), new FoodplanRoute(), ne
 
 const dataBaseInitiator = new DatabaseInitiator();
 
-const drop = false;
+const drop = true;
 dataBaseInitiator.initDataBase(drop,drop).then(
 
 app.express.listen(port, (err) => {
@@ -26,7 +26,8 @@ app.express.listen(port, (err) => {
 
 
     app.express.post("/initDb",(req,res)=>{
-        dataBaseInitiator.createEntities();
+        //dataBaseInitiator.createEntities();
+        dataBaseInitiator.createNew();
         res.send("db initialized");
     });
 

@@ -8,7 +8,7 @@ export class Comment extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({type:"longtext"})
     text: string;
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})

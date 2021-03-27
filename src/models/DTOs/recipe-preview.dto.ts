@@ -2,7 +2,7 @@ import { RatingInfoDTO } from "./rating-info.dto";
 import { TagDTO } from "./tag.dto";
 
 export interface RecipePreviewDTO{
-    id:number;
+    id?:number;
     name: string;
     picture: string;
     rating: RatingInfoDTO;

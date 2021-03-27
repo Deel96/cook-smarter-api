@@ -25,7 +25,7 @@ export class Recipe extends BaseEntity {
     @Column()
     name: string;
 
-    @Column()
+    @Column({type:"longtext"})
     directions: string;
 
     @Column()

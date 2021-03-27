@@ -9,6 +9,9 @@ import {IngredientEntry} from "./models/ingredientEntry";
 import {Foodplan} from "./models/foodplan";
 import {now} from "./util/timeGetter";
 import {Cookday} from "./models/cookday";
+import AuthService from './services/auth.service';
+import RecipeService from './services/recipe.service';
+import { RecipeDTO } from './models/DTOs/recipe.dto';
 
 export class DatabaseInitiator{
     constructor() {
@@ -173,10 +176,10 @@ export class DatabaseInitiator{
     async createIngredients(){
         const ingredients = 
         [
+        await new IngredientEntry("Zwiebel(n)").save(),
+        await new IngredientEntry("Hackfleisch").save(),
         await new IngredientEntry("Nudeln").save(),
-        await new IngredientEntry("Brot").save(),
-        await new IngredientEntry("Brot").save(),
-        await new IngredientEntry("Brot").save(),
+        await new IngredientEntry("Tomaten").save(),
         await new IngredientEntry("Brot").save(),
         await new IngredientEntry("Brot").save(),
         await new IngredientEntry("Brot").save(),
@@ -198,4 +201,497 @@ export class DatabaseInitiator{
             new IngredientEntry().name="Nudeln"
         ]
     }
+
+
+    async createUsers(){
+        const service = new AuthService();
+
+        const dennis = new User();
+        dennis.password="123";
+        dennis.username="Dennis96";
+        dennis.email = "dennis@mail.de";
+        await dennis.save();
+        const addedDennis= await service.register(dennis);
+
+
+        await this.createRecipes(addedDennis.id);
+    }
+
+
+    async createTags(){
+        const tag = new Tag();
+        tag.name="vegan";
+        tag.description ="Speisen ohne Tierprodukte."
+        await tag.save();
+
+        const tag2 = new Tag();
+        tag2.name="vegetarisch";
+        tag2.description ="Speisen ohne Fleisch."
+        await tag2.save();
+
+        const tag3 = new Tag();
+        tag3.name="schnell";
+        tag3.description ="Speisen unter 20 Minuten."
+        await tag3.save();
+
+        const tag4 = new Tag();
+        tag4.name="Klassiker";
+        tag4.description ="Speisen die jeder kennt."
+        await tag4.save();
+    }
+
+    async createRecipes(userId:number){
+        const service = new RecipeService();
+
+        const spaghettiBolognese : RecipeDTO=
+        {
+        id: null,
+        name: "Spagetthi Bolognese",
+        picture: "Bild",
+        rating:null,
+        directions: 
+        `Zwiebeln und Knoblauch sehr fein würfeln (ich mache alles zusammen in der Küchenmaschine).  Das Hackfleisch kurz anbraten lassen. Dosentomaten zufügen und mit Salz, Pfeffer und Paprika würzen. So lange köcheln lassen, bis eine pastenartige Masse entstanden ist. Soll die Soße flüssiger sein, kann man noch etwas Wein oder Brühe zugeben.
+
+        Die Spaghetti in Salzwasser bissfest kochen und zusammen mit der Soße servieren..
+        Wer es etwas pikanter mag, kann zu dieser Soße auch Chili-Bandnudeln essen. Wir finden, dass das auch sehr gut zusammenpasst. `,
+        preparationtime: 5,
+        cookingtime: 25,
+        difficulty: "einfach",
+        datePosted:null,
+        tags: [
+        {
+            id: 4
+        }
+        ],
+        online: true,
+        ingredients: [
+            {
+            name: "Spagetthi",
+            unit: "g",
+            amount: 500,
+            freshness: "verpackt"
+            },
+            {
+            name: "Hackfleisch",
+            unit: "g",
+            amount: 500,
+            freshness: "verpackt"
+            },
+            {
+            name: "Zwiebel(n)",
+            unit: "",
+            amount: 2,
+            freshness: "frisch"
+            },
+            {
+            name: "Dosentomaten",
+            amount: 400,
+            unit: "g",   
+            freshness: "verpackt"
+            },
+            {
+            name: "Knoblauchzehe(n)",
+            amount: 1,
+            unit: "1",   
+            freshness: "verpackt"
+            }              
+    ],
+        author:null
+        }
+
+        const gebratenerReis : RecipeDTO=
+        {
+        id: null,
+        name: "Gebtratener Reis mit Gemüse",
+        picture: "Bild",
+        rating:null,
+        directions: 
+        `Zwiebeln und Knoblauch sehr fein würfeln (ich mache alles zusammen in der Küchenmaschine).  Das Hackfleisch kurz anbraten lassen. Dosentomaten zufügen und mit Salz, Pfeffer und Paprika würzen. So lange köcheln lassen, bis eine pastenartige Masse entstanden ist. Soll die Soße flüssiger sein, kann man noch etwas Wein oder Brühe zugeben.
+
+        Die Spaghetti in Salzwasser bissfest kochen und zusammen mit der Soße servieren.
+        Wer es etwas pikanter mag, kann zu dieser Soße auch Chili-Bandnudeln essen. Wir finden, dass das auch sehr gut zusammenpasst. `,
+        preparationtime: 5,
+        cookingtime: 25,
+        difficulty: "einfach",
+        datePosted:null,
+        tags: [
+        {
+            id: 1
+        }
+        ],
+        online: true,
+        ingredients: [
+            {
+            name: "Reis",
+            unit: "g",
+            amount: 500,
+            freshness: "verpackt"
+            },
+            {
+            name: "Paprika",
+            unit: "g",
+            amount: 500,
+            freshness: "frisch"
+            },
+            {
+            name: "Zucchini",
+            unit: "g",
+            amount: 500,
+            freshness: "frisch"
+            },
+            {
+            name: "Möhre(n)",
+            unit: "g",
+            amount: 500,
+            freshness: "frisch"
+            },
+            {
+            name: "Zwiebel(n)",
+            unit: "",
+            amount: 2,
+            freshness: "frisch"
+            },
+            {
+            name: "Dosentomaten",
+            amount: 400,
+            unit: "g",   
+            freshness: "verpackt"
+            },
+            {
+            name: "Knoblauchzehe(n)",
+            amount: 1,
+            unit: "1",   
+            freshness: "verpackt"
+            }              
+    ],
+        author:null
+        }
+
+        const buttterBrot : RecipeDTO=
+        {
+        id: null,
+        name: "Gebtratener Reis mit Gemüse",
+        picture: "Bild",
+        rating:null,
+        directions: 
+        `Zwiebeln und Knoblauch sehr fein würfeln (ich mache alles zusammen in der Küchenmaschine).  Das Hackfleisch kurz anbraten lassen. Dosentomaten zufügen und mit Salz, Pfeffer und Paprika würzen. So lange köcheln lassen, bis eine pastenartige Masse entstanden ist. Soll die Soße flüssiger sein, kann man noch etwas Wein oder Brühe zugeben.
+
+        Die Spaghetti in Salzwasser bissfest kochen und zusammen mit der Soße servieren.
+        Wer es etwas pikanter mag, kann zu dieser Soße auch Chili-Bandnudeln essen. Wir finden, dass das auch sehr gut zusammenpasst. `,
+        preparationtime: 0,
+        cookingtime: 2,
+        difficulty: "einfach",
+        datePosted:null,
+        tags: [
+        {
+            id: 2
+        },
+        {
+            id: 3
+        },
+        {
+            id: 4
+        }
+        ],
+        online: true,
+        ingredients: [
+            {
+            name: "Brot",
+            unit: "g",
+            amount: 200,
+            freshness: "verpackt"
+            },
+            {
+            name: "Butter",
+            unit: "g",
+            amount: 50,
+            freshness: "frisch"    
+            }       
+        ],
+        author:null
+        }
+
+        const lasagne : RecipeDTO=
+        {
+        id: null,
+        name: "Lasagne",
+        picture: "Bild",
+        rating:null,
+        directions: 
+        `Zwiebeln und Knoblauch sehr fein würfeln (ich mache alles zusammen in der Küchenmaschine).  Das Hackfleisch kurz anbraten lassen. Dosentomaten zufügen und mit Salz, Pfeffer und Paprika würzen. So lange köcheln lassen, bis eine pastenartige Masse entstanden ist. Soll die Soße flüssiger sein, kann man noch etwas Wein oder Brühe zugeben.
+
+        Die Spaghetti in Salzwasser bissfest kochen und zusammen mit der Soße servieren.
+        Wer es etwas pikanter mag, kann zu dieser Soße auch Chili-Bandnudeln essen. Wir finden, dass das auch sehr gut zusammenpasst. `,
+        preparationtime: 10,
+        cookingtime: 30,
+        difficulty: "mittel",
+        datePosted:null,
+        tags: [
+        {
+            id: 4
+        }
+        ],
+        online: true,
+        ingredients: [
+            {
+            name: "Hackfleisch",
+            unit: "g",
+            amount: 200,
+            freshness: "verpackt"
+            },
+            {
+            name: "Zwiebel(n)",
+            unit: "",
+            amount: 1,
+            freshness: "frisch"    
+            },
+            {
+            name: "Knoblauchzehe(n)",
+            unit: "",
+            amount: 1,
+            freshness: "frisch"    
+            },
+            {
+            name: "Dosentomaten",
+            unit: "g",
+            amount: 400,
+            freshness: "verpackt"    
+            },
+            {
+            name: "Lasagneplatten",
+            unit: "g",
+            amount: 400,
+            freshness: "verpackt"    
+            },
+            {
+            name: "Streukäse",
+            unit: "g",
+            amount: 200,
+            freshness: "verpackt"    
+            }
+        ],
+        author:null
+        }
+
+        const kartoffelbrei : RecipeDTO=
+        {
+        id: null,
+        name: "Kartoffelbrei mit Buttergemüse",
+        picture: "Bild",
+        rating:null,
+        directions: 
+        `Zwiebeln und Knoblauch sehr fein würfeln (ich mache alles zusammen in der Küchenmaschine).  Das Hackfleisch kurz anbraten lassen. Dosentomaten zufügen und mit Salz, Pfeffer und Paprika würzen. So lange köcheln lassen, bis eine pastenartige Masse entstanden ist. Soll die Soße flüssiger sein, kann man noch etwas Wein oder Brühe zugeben.
+
+        Die Spaghetti in Salzwasser bissfest kochen und zusammen mit der Soße servieren.
+        Wer es etwas pikanter mag, kann zu dieser Soße auch Chili-Bandnudeln essen. Wir finden, dass das auch sehr gut zusammenpasst. `,
+        preparationtime: 5,
+        cookingtime: 15,
+        difficulty: "einfach",
+        datePosted:null,
+        tags: [
+        {
+            id: 2
+        },
+        {
+            id: 3
+        },
+        {
+            id: 4
+        }
+        ],
+        online: true,
+        ingredients: [
+            {
+            name: "Kartoffeln",
+            unit: "g",
+            amount: 200,
+            freshness: "frisch"
+            },
+            {
+            name: "Butter",
+            unit: "g",
+            amount: 10,
+            freshness: "verpackt"    
+            },
+            {
+            name: "Milch",
+            unit: "ml",
+            amount: 50,
+            freshness: "verpackt"    
+            },
+            {
+            name: "Paprika",
+            unit: "g",
+            amount: 100,
+            freshness: "frisch"    
+            },
+            {
+            name: "Erbsen",
+            unit: "g",
+            amount: 100,
+            freshness: "frisch"    
+            },
+            {
+            name: "Dosenmais",
+            unit: "g",
+            amount: 100,
+            freshness: "verpackt"    
+            }             
+        ],
+        author:null
+        }
+
+        const salat : RecipeDTO=
+        {
+        id: null,
+        name: "Gesunder Salat",
+        picture: "Bild",
+        rating:null,
+        directions: 
+        `Zwiebeln und Knoblauch sehr fein würfeln (ich mache alles zusammen in der Küchenmaschine).  Das Hackfleisch kurz anbraten lassen. Dosentomaten zufügen und mit Salz, Pfeffer und Paprika würzen. So lange köcheln lassen, bis eine pastenartige Masse entstanden ist. Soll die Soße flüssiger sein, kann man noch etwas Wein oder Brühe zugeben.
+
+        Die Spaghetti in Salzwasser bissfest kochen und zusammen mit der Soße servieren.
+        Wer es etwas pikanter mag, kann zu dieser Soße auch Chili-Bandnudeln essen. Wir finden, dass das auch sehr gut zusammenpasst. `,
+        preparationtime: 5,
+        cookingtime: 10,
+        difficulty: "einfach",
+        datePosted:null,
+        tags: [
+        {
+            id: 2
+        },
+        {
+            id: 3
+        },
+        {
+            id: 4
+        }
+        ],
+        online: true,
+        ingredients: [
+            {
+            name: "Kopfsalat",
+            unit: "g",
+            amount: 200,
+            freshness: "frisch"
+            },
+            {
+            name: "Olivenöl",
+            unit: "ml",
+            amount: 30,
+            freshness: "verpackt"    
+            },
+            {
+            name: "Tomaten",
+            unit: "g",
+            amount: 100,
+            freshness: "frisch"    
+            },
+            {
+            name: "Paprika",
+            unit: "g",
+            amount: 100,
+            freshness: "frisch"    
+            },
+            {
+            name: "Gurke(n)",
+            unit: "",
+            amount: 1,
+            freshness: "frisch"    
+            },
+            {
+            name: "Dosenmais",
+            unit: "g",
+            amount: 100,
+            freshness: "verpackt"    
+            }             
+        ],
+        author:null
+        }
+
+        const lauchsuppe : RecipeDTO=
+        {
+        id: null,
+        name: "Einfache Lauchsuppe",
+        picture: "Bild",
+        rating:null,
+        directions: 
+        `Zwiebeln und Knoblauch sehr fein würfeln (ich mache alles zusammen in der Küchenmaschine).  Das Hackfleisch kurz anbraten lassen. Dosentomaten zufügen und mit Salz, Pfeffer und Paprika würzen. So lange köcheln lassen, bis eine pastenartige Masse entstanden ist. Soll die Soße flüssiger sein, kann man noch etwas Wein oder Brühe zugeben.
+
+        Die Spaghetti in Salzwasser bissfest kochen und zusammen mit der Soße servieren.
+        Wer es etwas pikanter mag, kann zu dieser Soße auch Chili-Bandnudeln essen. Wir finden, dass das auch sehr gut zusammenpasst. `,
+        preparationtime: 5,
+        cookingtime: 15,
+        difficulty: "einfach",
+        datePosted:null,
+        tags: [
+        {
+            id: 2
+        },
+        {
+            id: 3
+        }
+        ],
+        online: true,
+        ingredients: [
+            {
+            name: "Poree",
+            unit: "",
+            amount: 2,
+            freshness: "frisch"
+            },
+            {
+            name: "Zwiebel(n)",
+            unit: "",
+            amount: 1,
+            freshness: "verpackt"    
+            },
+            {
+            name: "Hackfleisch",
+            unit: "g",
+            amount: 400,
+            freshness: "verpackt"    
+            },
+            {
+            name: "Sahne",
+            unit: "ml",
+            amount: 200,
+            freshness: "verpackt"    
+            },
+            {
+            name: "Schmelzkäse",
+            unit: "g",
+            amount: 200,
+            freshness: "verpackt"    
+            },
+            {
+            name: "Gemüsebrühe",
+            unit: "ml",
+            amount: 500,
+            freshness: "verpackt"    
+            }             
+        ],
+        author:null
+        }
+
+
+        await service.addRecipe(userId,lasagne);
+        await service.addRecipe(userId,gebratenerReis);
+        await service.addRecipe(userId,spaghettiBolognese);
+        await service.addRecipe(userId,buttterBrot);
+        await service.addRecipe(userId,kartoffelbrei);
+        await service.addRecipe(userId,salat);
+        await service.addRecipe(userId,lauchsuppe);
+
+    }
+
+
+
+
+    async createNew(){
+        await this.createTags();
+        await this.createUsers();
+    }
+
+
 }

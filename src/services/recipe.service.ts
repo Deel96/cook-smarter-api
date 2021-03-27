@@ -104,12 +104,12 @@ class RecipeService {
         const foundUser: User = await User.findOne({where: {id: userId}})
         if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
 
-        let foundRecipe: Recipe = await Recipe.findOne({where: {id: recipeId},relations:["ingredients"]});
+        let foundRecipe: Recipe = await Recipe.findOne({where: {id: recipeId},relations:["ingredients","author"]});
         if (!foundRecipe) throw new HttpException(404, `Recipe with Id: ${recipeId} not found under User with Id: ${userId}`);
 
         recipeData.datePosted= new Date();
         recipeData.id = recipeId;
-         foundRecipe = await Recipe.save({
+         await Recipe.save({
             id:recipeId,
             name: recipeData.name,
             picture:recipeData.picture,
@@ -120,10 +120,12 @@ class RecipeService {
             datePosted: recipeData.datePosted,
             online: recipeData.online,
             tags:recipeData.tags,
+            ingredients:recipeData.ingredients,
             author: foundUser
         }as Recipe);
+
+        foundRecipe = await Recipe.findOne({where: {id: recipeId},relations:["ingredients","author"]});
         
-        await foundRecipe.save();
         const result = this.recipeMapper.toDTO(foundRecipe)
 
         return result;
