@@ -1,5 +1,5 @@
 
-import { RatingInfoDTO } from "../models/DTOs/rating";
+import { RatingInfoDTO } from "../models/DTOs/rating-info.dto";
 import {RecipePreviewDTO} from "../models/DTOs/recipe-preview.dto"
 import { Recipe } from "../models/recipe";
 export class RecipePreviewMapper{

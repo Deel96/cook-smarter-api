@@ -14,7 +14,7 @@ import {IngredientEntry} from "./ingredientEntry";
 import {User} from "./user";
 import {Rating} from "./rating";
 import {Comment} from "./comment";
-import {RatingInfoDTO} from "./DTOs/rating";
+import {RatingInfoDTO} from "./DTOs/rating-info.dto";
 
 @Entity()
 export class Recipe extends BaseEntity {
