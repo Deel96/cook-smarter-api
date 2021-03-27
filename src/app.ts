@@ -13,7 +13,7 @@ export class App {
     public express;
     constructor(routes:Route[]) {
         this.express = express();
-        this.express.use(cors({credentials: true, origin: 'http://localhost:63342'}));
+        this.express.use(cors({credentials: true, origin: true}));
 
 
         this.initPassport();
