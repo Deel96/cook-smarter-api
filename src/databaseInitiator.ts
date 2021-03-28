@@ -701,8 +701,8 @@ export class DatabaseInitiator{
         const service = new RecipeService();
 
 
-        const rating = await service.addRating(userId, recipeId,);
-        await rating.save();
+        //const rating = await service.addRating(userId, recipeId,);
+        //await rating.save();
   
     }
  
