@@ -12,6 +12,7 @@ import {Cookday} from "./models/cookday";
 import AuthService from './services/auth.service';
 import RecipeService from './services/recipe.service';
 import { RecipeDTO } from './models/DTOs/recipe.dto';
+import { Supermarket } from './models/supermarket';
 
 export class DatabaseInitiator{
     constructor() {
@@ -202,6 +203,17 @@ export class DatabaseInitiator{
         ]
     }
 
+
+    async createSupermarkets(){
+        const supermarkets = ["Aldi,Lidl,Netto, Marktkauf, Wochenmarkt, Sonstiges"]
+
+        for(const name of supermarkets){
+            const supermarket = new Supermarket();
+            supermarket.name=name
+            await supermarket.save();
+        }
+        
+    } 
 
     async createUsers(){
         const service = new AuthService();
@@ -685,11 +697,19 @@ export class DatabaseInitiator{
 
     }
 
+    async createRatings(userId: number,recipeId: number){
+        const service = new RecipeService();
 
 
+        const rating = await service.addRating(userId, recipeId,);
+        await rating.save();
+  
+    }
+ 
 
     async createNew(){
         await this.createTags();
+        await this.createSupermarkets();
         await this.createUsers();
     }
 

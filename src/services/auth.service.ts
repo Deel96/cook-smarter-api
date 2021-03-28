@@ -10,7 +10,7 @@ class AuthService {
     //Return all recipes of the database
     public async register(userData:User): Promise<User> {
         const newUser = User.create(userData);
-        newUser.save();
+        await newUser.save();
         return newUser;
     }
 

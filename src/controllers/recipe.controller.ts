@@ -39,7 +39,7 @@ class RecipeController {
         try {
             
             const user : User = req.user as User;
-            if(!user) throw new HttpException(401,"User not found");
+            if(!user) throw new HttpException(401,"User not foundAll Recipes");
             const userId = Number(user.id);
 
             const foundRecipes: RecipePreviewDTO[] = await this.recipeService.getAllRecipesFromLoggedInUser(userId);
