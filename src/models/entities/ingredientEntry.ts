@@ -1,6 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany, ManyToOne} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne} from "typeorm";
 import {Recipe} from "./recipe";
-//import {Ingredient} from "./ingredient";
+
 
 @Entity()
 export class IngredientEntry extends BaseEntity {
@@ -27,6 +27,4 @@ export class IngredientEntry extends BaseEntity {
 
     @Column()
     name:string;
-    // @ManyToOne(()=>Ingredient, ingredient=>ingredient.ingrediententries,{onDelete: 'CASCADE'})
-    // ingredient: Ingredient;
 }

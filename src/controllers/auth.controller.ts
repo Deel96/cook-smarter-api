@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import passport from "passport"
 import "../config/passport.config";
-import {User} from "../models/user";
+import {User} from "../models/entities/user";
 import AuthService from '../services/auth.service';
 
 class AuthController {

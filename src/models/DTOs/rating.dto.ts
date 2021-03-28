@@ -1,3 +1,5 @@
 export interface  RatingDTO{
-    rating: number;
+    id:number,
+    author: string,
+    stars: number;
 }

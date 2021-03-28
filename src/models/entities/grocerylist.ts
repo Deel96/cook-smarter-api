@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, BaseEntity, ManyToOne, OneToMany} from "typeorm";
 import {GroceryEntry} from "./groceryEntry";
 import {Supermarket} from "./supermarket";
 import {Foodplan} from "./foodplan";

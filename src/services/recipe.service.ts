@@ -1,8 +1,8 @@
-import {Recipe} from "../models/recipe";
+import {Recipe} from "../models/entities/recipe";
 import {HttpException} from "../exceptionTypes/httpException";
-import {Comment} from "../models/comment";
-import {Rating} from "../models/rating";
-import {User} from "../models/user";
+import {Comment} from "../models/entities/comment";
+import {Rating} from "../models/entities/rating";
+import {User} from "../models/entities/user";
 import { RecipePreviewDTO } from "../models/DTOs/recipe-preview.dto";
 import { RecipePreviewMapper } from "../mapper/RecipePreviewMapper";
 import { RecipeMapper } from "../mapper/RecipeMapper";
@@ -61,7 +61,7 @@ class RecipeService {
         
         recipeData.datePosted= new Date();
         recipeData.author= foundUser.username;
-        recipeData.rating = {rating:0,votes:0}
+        recipeData.rating = {stars:0,votes:0}
 
         const newRecipe = Recipe.create({
             name: recipeData.name,
@@ -75,7 +75,6 @@ class RecipeService {
             tags:recipeData.tags,
             author: foundUser,
             ingredients:recipeData.ingredients,
-            rating: recipeData.rating
         });
 
         await newRecipe.save();
@@ -210,7 +209,7 @@ class RecipeService {
         return foundRatings;
     }
 
-    //Adds an rating to a given recipe
+    //Adds an rating to a given recipe //TODO delete user
     public async addRating(userId:number, recipeId:number,ratingData: Rating): Promise<Rating> {
         const foundRecipe = await Recipe.findOne({where: {id: recipeId}});
         if (!foundRecipe) throw new HttpException(404, `Recipe with Id: ${recipeId} not found`);

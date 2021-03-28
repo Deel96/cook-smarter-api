@@ -1,8 +1,7 @@
-
 import { IngredientEntryDTO } from "../models/DTOs/ingredient-entry.dto";
 import { RatingInfoDTO } from "../models/DTOs/rating-info.dto";
 import { RecipeDTO } from "../models/DTOs/recipe.dto";
-import { Recipe } from "../models/recipe";
+import { Recipe } from "../models/entities/recipe";
 import { IngredientEntryMapper } from "./IngredientMapper";
 export class RecipeMapper{
     private ingredientEntryMapper = new IngredientEntryMapper();
@@ -31,18 +30,17 @@ export class RecipeMapper{
 
 }
 private calcRatingOfRecipe(recipe:Recipe):RatingInfoDTO{
-    //if(!recipe.rating) return new RatingInfo();
     const length = recipe.ratings?.length;
-    if(!length){return {rating:0,votes:0} }
+    if(!length){return {stars:0,votes:0} }
     let sum =0;
     for(const rating of recipe?.ratings){
         sum+= rating.stars;
     }
-    const finalRating : RatingInfoDTO = {rating:0,votes:0};
+    const finalRating : RatingInfoDTO = {stars:0,votes:0};
     if(length>0){
-        finalRating.rating= sum/length;
+        finalRating.stars= sum/length;
     }else{
-        finalRating.rating =0;
+        finalRating.stars =0;
     }
     finalRating.votes= length;
 

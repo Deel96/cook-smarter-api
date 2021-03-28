@@ -1,5 +1,5 @@
 
-
+import 'reflect-metadata';
 import {App}from './app'
 import RecipeRoute from "./routes/recipe.route";
 import {DatabaseInitiator} from "./databaseInitiator";
@@ -8,9 +8,6 @@ import FoodplanRoute from "./routes/foodplan.route";
 import GrocerylistRoute from "./routes/grocerylist.route";
 const port = process.env.PORT || 3000;
 const app = new App([new RecipeRoute(), new AuthRoute(), new FoodplanRoute(), new GrocerylistRoute]);
-
-
-
 
 const dataBaseInitiator = new DatabaseInitiator();
 
@@ -24,17 +21,13 @@ app.express.listen(port, (err) => {
     }
     console.log(`Server is listening on port ${port}.`);
 
-
     app.express.post("/initDb",(req,res)=>{
         //dataBaseInitiator.createEntities();
         dataBaseInitiator.createNew();
         res.send("db initialized");
     });
 
-
     return;
 })
 
-
 )
-

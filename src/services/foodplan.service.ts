@@ -1,38 +1,12 @@
-import {Foodplan} from "../models/foodplan";
-import {User} from "../models/user";
+import {Foodplan} from "../models/entities/foodplan";
+import {User} from "../models/entities/user";
 import {HttpException} from "../exceptionTypes/httpException";
-import {Recipe} from "../models/recipe";
-import {Cookday} from "../models/cookday";
-import { Any } from "typeorm";
-import { IngredientEntry } from "../models/ingredientEntry";
-import { flattenDiagnosticMessageText, reduceEachLeadingCommentRange } from "typescript";
-import { GroceryEntry } from "../models/groceryEntry";
-import e from "express";
-import { Grocerylist } from "../models/grocerylist";
-
+import {Recipe} from "../models/entities/recipe";
+import {Cookday} from "../models/entities/cookday";
+import { GroceryEntry } from "../models/entities/groceryEntry";
+import { Grocerylist } from "../models/entities/grocerylist";
 
 class FoodplanService {
-
-    //Return all recipes of the database
-    public async getCurrentFoodplan(userId:number): Promise<Foodplan> {
-        const foundUser: User = await User.findOne({where: {id: userId}})
-        let result = await Foodplan.findOne({where:{user:foundUser},relations:["cookdays","cookdays.recipes"]});
-
-        if(!result){
-            result = await this.initFoodplan();
-            foundUser.foodplan = result;
-            //result.user= foundUser;
-            await foundUser.save();
-            await result.save();
-        }
-
-        
-
-
-
-        return result;
-    }
-
     public async addRecipeToCookday(userId:number,cookdayId:number, recipeId:number,cookdayData:Cookday): Promise<string> {
         const foundUser: User = await User.findOne({
             where: {id: userId},
@@ -62,7 +36,6 @@ class FoodplanService {
 
         await foundUser.save();
         return "Added Recipe to Cookday";
-
     }
 
     public async deleteRecipeFromCookday(userId:number,cookdayId:number, recipeId:number): Promise<string> {
@@ -77,20 +50,31 @@ class FoodplanService {
                                                                         under Cookday Id ${cookdayId}  
                                                                             under User with Id: ${userId}`);
 
-
         foundCookday.recipes = foundCookday.recipes.filter(function( recipe:Recipe ) {
             return recipe.id !==recipeId ;
         });
 
         await foundCookday.save();
 
-
         return "Recipe deleted from cookday sucessfull";
     }
 
+    //Return all recipes of the database
+    public async getCurrentFoodplan(userId:number): Promise<Foodplan> {
+        const foundUser: User = await User.findOne({where: {id: userId}})
+        let result = await Foodplan.findOne({where:{user:foundUser},relations:["cookdays","cookdays.recipes"]});
+
+        if(!result){
+            result = await this.initFoodplan();
+            foundUser.foodplan = result;
+            await foundUser.save();
+            await result.save();
+        }
+
+        return result;
+    }
 
     private async initFoodplan(){
-        
         const result = new Foodplan();
         result.cookdays=[];
         const date_start = new Date();
@@ -98,13 +82,13 @@ class FoodplanService {
         result.startDate = date_start
         result.endDate = new Date(date_end.setDate(date_end.getDate() + 7));
         await result.save();
-        
+
         const addCookdays = async (days:number)=>{
             for(let i=0;i<days;i++){
                 const date = new Date()
+                date.setDate(date.getDate() + i);
                 const cookday = new Cookday();
-                cookday.day = new Date(date.setDate(date.getDate() + i));
-                //cookday.foodplan = result;
+                cookday.day = date;            
                 cookday.recipes =[];
                 result.cookdays.push(cookday);
                 await cookday.save();
@@ -114,9 +98,7 @@ class FoodplanService {
         return result;
     }
 
-
     private async updateGrocerylist(foodplan:Foodplan):Promise<GroceryEntry[]>{
-
         const res :GroceryEntry[] = [];
         const cookdays = await Cookday.find({where: {foodplan: foodplan},relations:["recipes","recipes.ingredients"]});
         for(const cookday of cookdays){
@@ -136,16 +118,11 @@ class FoodplanService {
                             res.push(item);
                             item.save();
                         }
-                    
                 }
             }
         }
         console.log(res);
         return res;
     }
-
-    
-
-
 }
 export default FoodplanService;

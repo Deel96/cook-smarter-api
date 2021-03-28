@@ -7,14 +7,14 @@ import {
     JoinTable,
     OneToMany,
     ManyToOne,
-    AfterLoad, AfterInsert, AfterUpdate
 } from "typeorm";
 import {Tag} from "./tag";
 import {IngredientEntry} from "./ingredientEntry";
 import {User} from "./user";
 import {Rating} from "./rating";
 import {Comment} from "./comment";
-import {RatingInfoDTO} from "./DTOs/rating-info.dto";
+import { RatingInfoDTO } from "../DTOs/rating-info.dto";
+
 
 @Entity()
 export class Recipe extends BaseEntity {
@@ -61,8 +61,4 @@ export class Recipe extends BaseEntity {
 
     @OneToMany(()=>Rating, rating => rating.recipe,{onDelete: 'CASCADE'})
     ratings: Rating[];
-
-    rating: RatingInfoDTO
-
-
 }

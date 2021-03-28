@@ -1,10 +1,8 @@
-
 import { IngredientEntryDTO } from "../models/DTOs/ingredient-entry.dto";
-import { IngredientEntry } from "../models/ingredientEntry";
+import { IngredientEntry } from "../models/entities/ingredientEntry";
 
 export class IngredientEntryMapper{
-
-    toDTO(item: IngredientEntry): IngredientEntryDTO {
+    public toDTO(item: IngredientEntry): IngredientEntryDTO {
         return {
                 id:item.id,
                 name: item.name,
@@ -16,8 +14,5 @@ export class IngredientEntryMapper{
     // toPersistence(u: RecipePreviewDTO): RecipePreview {
     //     return undefined;
     // }
-
-
 }
-
 }

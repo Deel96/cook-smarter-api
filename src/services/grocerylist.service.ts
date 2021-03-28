@@ -1,18 +1,14 @@
-import {User} from "../models/user";
+import {User} from "../models/entities/user";
 import {HttpException} from "../exceptionTypes/httpException";
-import {Recipe} from "../models/recipe";
-import {Grocerylist} from "../models/grocerylist";
-import { Foodplan } from "../models/foodplan";
-
+import {Recipe} from "../models/entities/recipe";
+import {Grocerylist} from "../models/entities/grocerylist";
+import { Foodplan } from "../models/entities/foodplan";
 
 class GrocerylistService {
-
     //Return all grocerylists of a given foodplan
     public async getAllGrocerylistsFromFoodplan(userId:number): Promise<Grocerylist[]> {
         console.log("ser")
         console.log(userId);
-
-
 
         const foundUser: User = await User.findOne({where: {id: userId},relations:["foodplan","foodplan.grocerylists"]})
 
@@ -31,8 +27,8 @@ class GrocerylistService {
         return result;
     }
 
+    //Updates the Grocerylist of the foodplan
     public async updateGrocerylist(userId:number,grocerylistId:number, recipe: Recipe): Promise<Grocerylist> {
-
         const foundUser: User = await User.findOne({where: {id: userId}})
         if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
 
@@ -43,14 +39,5 @@ class GrocerylistService {
 
         return foundGrocerylist;
     }
-
-
-
-
-
 }
 export default GrocerylistService;
-
-
-//TODO Controller / Routes
-//login kotlin / JS

@@ -1,27 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
-
-
-import {User} from "../models/user";
-import {Foodplan} from "../models/foodplan";
+import {User} from "../models/entities/user";
+import {Foodplan} from "../models/entities/foodplan";
 import FoodplanService from "../services/foodplan.service";
-import {Cookday} from "../models/cookday";
+import {Cookday} from "../models/entities/cookday";
 
 class SettingController {
-    public foodplanService = new FoodplanService();
-
-    //Return the current foodplan
-    public getCurrentFoodplan = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-        try {
-            const user : User = req.user as User;
-            const userId = Number(user.id);
-            const foundFoodplan: Foodplan = await this.foodplanService.getCurrentFoodplan(userId);
-
-            res.status(200).json({ data: foundFoodplan, message: 'getCurrentFoodplan' });
-        } catch (error) {
-            next(error);
-        }
-    };
-
     public addRecipeToCookday = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const user : User = req.user as User;
@@ -53,7 +36,19 @@ class SettingController {
         }
     };
 
+    public foodplanService = new FoodplanService();
+    //Return the current foodplan
+    public getCurrentFoodplan = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const user : User = req.user as User;
+            const userId = Number(user.id);
+            const foundFoodplan: Foodplan = await this.foodplanService.getCurrentFoodplan(userId);
 
+            res.status(200).json({ data: foundFoodplan, message: 'getCurrentFoodplan' });
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 export default SettingController;

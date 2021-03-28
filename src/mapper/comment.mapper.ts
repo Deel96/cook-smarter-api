@@ -1,8 +1,6 @@
 
 import { CommentDTO } from "../models/DTOs/comment.dto";
-import { Comment } from "../models/comment";
-import { text } from "express";
-
+import { Comment } from "../models/entities/comment";
 
 export class CommentMapper{
 

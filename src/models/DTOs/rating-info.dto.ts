@@ -1,4 +1,4 @@
 export interface  RatingInfoDTO{
-    rating: number;
+    stars: number;
     votes: number;
 }

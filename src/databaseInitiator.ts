@@ -1,51 +1,21 @@
-import 'reflect-metadata';
-import {Comment} from "./models/comment";
-import {User} from "./models/user";
-import {Recipe} from "./models/recipe";
-import {Connection, ConnectionOptions, createConnection} from "typeorm";
-import {Tag} from "./models/tag";
-import {IngredientEntry} from "./models/ingredientEntry";
-//import {Ingredient} from "./models/ingredient";
-import {Foodplan} from "./models/foodplan";
-import {now} from "./util/timeGetter";
-import {Cookday} from "./models/cookday";
+import {Comment} from "./models/entities/comment";
+import {User} from "./models/entities/user";
+import {Recipe} from "./models/entities/recipe";
+import { ConnectionOptions, createConnection} from "typeorm";
+import {Tag} from "./models/entities/tag";
+import {IngredientEntry} from "./models/entities/ingredientEntry";
+import {Foodplan} from "./models/entities/foodplan";
+import {Cookday} from "./models/entities/cookday";
 import AuthService from './services/auth.service';
 import RecipeService from './services/recipe.service';
 import { RecipeDTO } from './models/DTOs/recipe.dto';
-import { Supermarket } from './models/supermarket';
+import { Supermarket } from './models/entities/supermarket';
 
 export class DatabaseInitiator{
     constructor() {
     }
 
-    async initDataBase(drop:boolean,sync:boolean){
-        let options:ConnectionOptions= {
-            type: "mariadb",
-            host: "j5zntocs2dn6c3fj.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
-            port: 3306,
-            username: "imo9y7s1o40t52dh",
-            password: "a8ho7luvk4li0q6z",
-            database: "vniujjdsyxjngjym",
-            entities: [
-            "src/models/*.ts"
-        ],
-            synchronize: sync,
-            logging: true,
-            dropSchema:drop
-        };
-
-
-        const connection = await createConnection(options);
-
-       // this.createEntities();
-
-
-
-
-
-    }
-
-    async createEntities(){
+    public async createEntities(){
         const user = new User();
         user.username = "Dennis2";
         user.servingsize = 1;
@@ -70,8 +40,6 @@ export class DatabaseInitiator{
         user3.password="12345";
         user3.email="stefen@test.de";
         await user3.save();
-
-
 
         const tag = new Tag();
         tag.name="kalt";
@@ -112,7 +80,6 @@ export class DatabaseInitiator{
         dennisFoodplan.endDate= new Date(date_end.setDate(date_end.getDate() + 7));
         await dennisFoodplan.save();
 
-
         const addRecipe = async(amount:number)=>{
             for(let i=0;i<amount;i++){
                 const recipe = new Recipe();
@@ -138,7 +105,6 @@ export class DatabaseInitiator{
                         cookday.recipes =[recipe];
                         await cookday.save();
                     }
-
                 }
 
                 if(i%2 !==0){
@@ -159,22 +125,9 @@ export class DatabaseInitiator{
         }
             await user.save();
         await addRecipe(10);
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
-
-    async createIngredients(){
+    public async createIngredients(){
         const ingredients = 
         [
         await new IngredientEntry("Zwiebel(n)").save(),
@@ -191,68 +144,29 @@ export class DatabaseInitiator{
 
         ]
 
-
-
         const ingredient2 = new IngredientEntry();
         ingredient2.name="Butter";
         await ingredient2.save();
-
 
         return [
             new IngredientEntry().name="Nudeln"
         ]
     }
 
-
-    async createSupermarkets(){
-        const supermarkets = ["Aldi,Lidl,Netto, Marktkauf, Wochenmarkt, Sonstiges"]
-
-        for(const name of supermarkets){
-            const supermarket = new Supermarket();
-            supermarket.name=name
-            await supermarket.save();
-        }
-        
-    } 
-
-    async createUsers(){
-        const service = new AuthService();
-
-        const dennis = new User();
-        dennis.password="123";
-        dennis.username="Dennis96";
-        dennis.email = "dennis@mail.de";
-        await dennis.save();
-        const addedDennis= await service.register(dennis);
-
-
-        await this.createRecipes(addedDennis.id);
+    public async createNew(){
+        await this.createTags();
+        await this.createSupermarkets();
+        await this.createUsers();
     }
 
+    public async createRatings(userId: number,recipeId: number){
+        const service = new RecipeService();
 
-    async createTags(){
-        const tag = new Tag();
-        tag.name="vegan";
-        tag.description ="Speisen ohne Tierprodukte."
-        await tag.save();
-
-        const tag2 = new Tag();
-        tag2.name="vegetarisch";
-        tag2.description ="Speisen ohne Fleisch."
-        await tag2.save();
-
-        const tag3 = new Tag();
-        tag3.name="schnell";
-        tag3.description ="Speisen unter 20 Minuten."
-        await tag3.save();
-
-        const tag4 = new Tag();
-        tag4.name="Klassiker";
-        tag4.description ="Speisen die jeder kennt."
-        await tag4.save();
+        //const rating = await service.addRating(userId, recipeId,);
+        //await rating.save();
     }
 
-    async createRecipes(userId:number){
+    public async createRecipes(userId:number){
         const service = new RecipeService();
 
         const spaghettiBolognese : RecipeDTO=
@@ -686,7 +600,6 @@ export class DatabaseInitiator{
         author:null
         }
 
-
         await service.addRecipe(userId,lasagne);
         await service.addRecipe(userId,gebratenerReis);
         await service.addRecipe(userId,spaghettiBolognese);
@@ -694,24 +607,71 @@ export class DatabaseInitiator{
         await service.addRecipe(userId,kartoffelbrei);
         await service.addRecipe(userId,salat);
         await service.addRecipe(userId,lauchsuppe);
-
     }
 
-    async createRatings(userId: number,recipeId: number){
-        const service = new RecipeService();
+    public async createSupermarkets(){
+        const supermarkets = ["Aldi,Lidl,Netto, Marktkauf, Wochenmarkt, Sonstiges"]
 
-
-        //const rating = await service.addRating(userId, recipeId,);
-        //await rating.save();
-  
-    }
- 
-
-    async createNew(){
-        await this.createTags();
-        await this.createSupermarkets();
-        await this.createUsers();
+        for(const name of supermarkets){
+            const supermarket = new Supermarket();
+            supermarket.name=name
+            await supermarket.save();
+        }
     }
 
+    public async createTags(){
+        const tag = new Tag();
+        tag.name="vegan";
+        tag.description ="Speisen ohne Tierprodukte."
+        await tag.save();
 
+        const tag2 = new Tag();
+        tag2.name="vegetarisch";
+        tag2.description ="Speisen ohne Fleisch."
+        await tag2.save();
+
+        const tag3 = new Tag();
+        tag3.name="schnell";
+        tag3.description ="Speisen unter 20 Minuten."
+        await tag3.save();
+
+        const tag4 = new Tag();
+        tag4.name="Klassiker";
+        tag4.description ="Speisen die jeder kennt."
+        await tag4.save();
+    }
+
+    public async createUsers(){
+        const service = new AuthService();
+
+        const dennis = new User();
+        dennis.password="123";
+        dennis.username="Dennis96";
+        dennis.email = "dennis@mail.de";
+        await dennis.save();
+        const addedDennis= await service.register(dennis);
+
+        await this.createRecipes(addedDennis.id);
+    }
+
+    public async initDataBase(drop:boolean,sync:boolean){
+        let options:ConnectionOptions= {
+            type: "mariadb",
+            host: "j5zntocs2dn6c3fj.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
+            port: 3306,
+            username: "imo9y7s1o40t52dh",
+            password: "a8ho7luvk4li0q6z",
+            database: "vniujjdsyxjngjym",
+            entities: [
+            "src/models/entities/*.ts"
+        ],
+            synchronize: sync,
+            logging: true,
+            dropSchema:drop
+        };
+
+        const connection = await createConnection(options);
+
+       // this.createEntities();
+    }
 }
