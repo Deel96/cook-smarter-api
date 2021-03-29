@@ -42,8 +42,8 @@ class FoodplanService {
         const foundUser: User = await User.findOne({where: {id: userId}})
         if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
 
-        const foundRecipe = await Recipe.findOne({where: {id: recipeId, author:foundUser}});
-        if (!foundRecipe) throw new HttpException(404, `Recipe with Id: ${recipeId} not found under User with Id: ${userId}`);
+        const foundRecipe = await Recipe.findOne({where: {id: recipeId}});
+        if (!foundRecipe) throw new HttpException(404, `Recipe with Id: ${recipeId} not found`);
 
         const foundCookday: Cookday = await Cookday.findOne({where: {id: cookdayId},relations:["recipes"]});
         if (!foundCookday) throw new HttpException(404, `Recipe with Id: ${recipeId} not found 
@@ -74,7 +74,7 @@ class FoodplanService {
         return result;
     }
 
-    private async initFoodplan(){
+    public async initFoodplan(){
         const result = new Foodplan();
         result.cookdays=[];
         const date_start = new Date();
