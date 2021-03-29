@@ -209,7 +209,7 @@ class RecipeService {
         return foundRatings;
     }
 
-    //Adds an rating to a given recipe //TODO delete user
+    //Adds an rating to a given recipe
     public async addRating(userId:number, recipeId:number,ratingData: Rating): Promise<Rating> {
         const foundRecipe = await Recipe.findOne({where: {id: recipeId}});
         if (!foundRecipe) throw new HttpException(404, `Recipe with Id: ${recipeId} not found`);

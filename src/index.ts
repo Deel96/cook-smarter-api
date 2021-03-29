@@ -6,8 +6,9 @@ import {DatabaseInitiator} from "./databaseInitiator";
 import AuthRoute from "./routes/auth.route";
 import FoodplanRoute from "./routes/foodplan.route";
 import GrocerylistRoute from "./routes/grocerylist.route";
+import MaintenanceRoute from './routes/maintenance.route';
 const port = process.env.PORT || 3000;
-const app = new App([new RecipeRoute(), new AuthRoute(), new FoodplanRoute(), new GrocerylistRoute]);
+const app = new App([new RecipeRoute(), new AuthRoute(), new FoodplanRoute(), new GrocerylistRoute, new MaintenanceRoute]);
 
 const dataBaseInitiator = new DatabaseInitiator();
 
@@ -21,11 +22,6 @@ app.express.listen(port, (err) => {
     }
     console.log(`Server is listening on port ${port}.`);
 
-    app.express.post("/initDb",(req,res)=>{
-        //dataBaseInitiator.createEntities();
-        dataBaseInitiator.createNew();
-        res.send("db initialized");
-    });
 
     return;
 })
