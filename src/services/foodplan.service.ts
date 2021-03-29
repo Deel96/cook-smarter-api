@@ -5,6 +5,7 @@ import {Recipe} from "../models/entities/recipe";
 import {Cookday} from "../models/entities/cookday";
 import { GroceryEntry } from "../models/entities/groceryEntry";
 import { Grocerylist } from "../models/entities/grocerylist";
+import { GrocerylistUpdateDTO } from "../models/DTOs/grocerylist-update.dto";
 
 class FoodplanService {
     public async addRecipeToCookday(userId:number,cookdayId:number, recipeId:number,cookdayData:Cookday): Promise<string> {
@@ -25,7 +26,7 @@ class FoodplanService {
        
         foundCookday.recipes.push(foundRecipe);
         await foundCookday.save();
-        const entries = await this.updateGrocerylist(foundUser.foodplan)
+        const entries = await this.createGrocerylist(foundUser.foodplan)
         
         const gl = new Grocerylist();
         gl.entries =entries;
@@ -59,12 +60,11 @@ class FoodplanService {
 
         await foundCookday.save();
 
-        const entries = await this.updateGrocerylist(foundUser.foodplan)
+        const entries = await this.createGrocerylist(foundUser.foodplan)
         
         const gl = new Grocerylist();
         gl.entries =entries;
-         foundUser.foodplan.grocerylists.forEach(async (gl)=>await gl.remove());
-         foundUser.foodplan.grocerylists=[];
+         Grocerylist.remove(foundUser.foodplan.grocerylists);
          await foundUser.save();
 
         foundUser.foodplan.grocerylists = [gl];
@@ -80,6 +80,10 @@ class FoodplanService {
     //Return all recipes of the database
     public async getCurrentFoodplan(userId:number): Promise<Foodplan> {
         const foundUser: User = await User.findOne({where: {id: userId}})
+        if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
+
+
+
         let result = await Foodplan.findOne({where:{user:foundUser},relations:["cookdays","cookdays.recipes"]});
 
         if(!result){
@@ -116,7 +120,8 @@ class FoodplanService {
         return result;
     }
 
-    private async updateGrocerylist(foodplan:Foodplan):Promise<GroceryEntry[]>{
+
+    private async createGrocerylist(foodplan:Foodplan):Promise<GroceryEntry[]>{
         const res :GroceryEntry[] = [];
         const cookdays = await Cookday.find({where: {foodplan: foodplan},relations:["recipes","recipes.ingredients"]});
         for(const cookday of cookdays){

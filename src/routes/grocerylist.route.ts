@@ -11,7 +11,7 @@ class GrocerylistRoute {
 
     private initializeRoutes() {//TODO
         this.router.get("/me/foodplan/grocerylists", this.grocerylistController.getAllGroceryListsFromFoodplan);
-       // this.router.post(`/me/foodplan/cookdays/:cookdayId/recipes`, this.foodplanController.addRecipeToCookday);
+        this.router.put(`/me/foodplan/grocerylists/:id`, this.grocerylistController.updateGrocerylist);
         //this.router.delete(`/me/foodplan/cookdays/:cookdayId/recipes/:recipeId`, this.foodplanController.deleteRecipeFromCookday);
     }
 }
