@@ -11,7 +11,7 @@ class MaintenanceRoute {
     }
 
     private initializeRoutes() {
-        this.router.post("/dbInit",this.maintenanceController.dbInit);
+        this.router.post("/initDb",this.maintenanceController.dbInit);
         this.router.post("/dbReset", this.maintenanceController.dbReset);
         }
 }

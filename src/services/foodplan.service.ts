@@ -39,7 +39,10 @@ class FoodplanService {
     }
 
     public async deleteRecipeFromCookday(userId:number,cookdayId:number, recipeId:number): Promise<string> {
-        const foundUser: User = await User.findOne({where: {id: userId}})
+        const foundUser: User = await User.findOne({
+            where: {id: userId},
+            relations:["foodplan","foodplan.cookdays","foodplan.grocerylists"]
+        })
         if (!foundUser) throw new HttpException(404, `User with Id: ${userId} not found`);
 
         const foundRecipe = await Recipe.findOne({where: {id: recipeId}});
@@ -55,6 +58,21 @@ class FoodplanService {
         });
 
         await foundCookday.save();
+
+        const entries = await this.updateGrocerylist(foundUser.foodplan)
+        
+        const gl = new Grocerylist();
+        gl.entries =entries;
+         foundUser.foodplan.grocerylists.forEach(async (gl)=>await gl.remove());
+         foundUser.foodplan.grocerylists=[];
+         await foundUser.save();
+
+        foundUser.foodplan.grocerylists = [gl];
+        await foundUser.save();
+
+
+
+       
 
         return "Recipe deleted from cookday sucessfull";
     }
@@ -116,7 +134,7 @@ class FoodplanService {
                     }
                         if(!found){ 
                             res.push(item);
-                            item.save();
+                            //await item.save();
                         }
                 }
             }

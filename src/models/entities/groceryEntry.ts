@@ -22,6 +22,6 @@ export class GroceryEntry extends BaseEntity {
     @Column()
     name:string;
 
-    @ManyToOne(()=>Grocerylist, grocerylist=>grocerylist.entries)
+    @ManyToOne(()=>Grocerylist, grocerylist=>grocerylist.entries,{onDelete: 'CASCADE'})
     grocerylist: Grocerylist;
 }

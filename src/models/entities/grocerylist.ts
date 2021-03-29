@@ -9,7 +9,7 @@ export class Grocerylist extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToMany(()=>GroceryEntry, groceryentry => groceryentry.grocerylist)
+    @OneToMany(()=>GroceryEntry, groceryentry => groceryentry.grocerylist,{onDelete: 'CASCADE', cascade: true })
     entries:GroceryEntry[]
 
     @ManyToOne(()=>Supermarket,supermarket => supermarket.grocerylists)
