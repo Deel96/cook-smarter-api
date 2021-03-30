@@ -1,7 +1,7 @@
 import {Comment} from "./models/entities/comment";
 import {User} from "./models/entities/user";
 import {Recipe} from "./models/entities/recipe";
-import { ConnectionOptions, createConnection} from "typeorm";
+import { Connection, ConnectionOptions, createConnection} from "typeorm";
 import {Tag} from "./models/entities/tag";
 import {IngredientEntry} from "./models/entities/ingredientEntry";
 import {Foodplan} from "./models/entities/foodplan";
@@ -12,6 +12,7 @@ import { RecipeDTO } from './models/DTOs/recipe.dto';
 import { Supermarket } from './models/entities/supermarket';
 
 export class DatabaseInitiator{
+    public connection:Connection;
     constructor() {
     }
 
@@ -670,7 +671,7 @@ export class DatabaseInitiator{
             dropSchema:drop
         };
 
-        const connection = await createConnection(options);
+        this.connection = await createConnection(options);
     }
 
 
