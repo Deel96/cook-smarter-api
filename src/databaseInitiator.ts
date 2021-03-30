@@ -671,9 +671,7 @@ export class DatabaseInitiator{
         };
 
         const connection = await createConnection(options);
-
-
-        
-       // this.createEntities();
     }
+
+
 }

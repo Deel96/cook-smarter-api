@@ -1,7 +1,4 @@
-import {Foodplan} from "../models/entities/foodplan";
 import {User} from "../models/entities/user";
-import {HttpException} from "../exceptionTypes/httpException";
-import {Cookday} from "../models/entities/cookday";
 import FoodplanService from "./foodplan.service";
 
 class AuthService {

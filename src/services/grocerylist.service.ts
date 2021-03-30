@@ -1,6 +1,5 @@
 import {User} from "../models/entities/user";
 import {HttpException} from "../exceptionTypes/httpException";
-import {Recipe} from "../models/entities/recipe";
 import {Grocerylist} from "../models/entities/grocerylist";
 import { Foodplan } from "../models/entities/foodplan";
 import { GrocerylistUpdateDTO } from "../models/DTOs/grocerylist-update.dto";
@@ -22,7 +21,7 @@ class GrocerylistService {
         return result;
     }
 
-    //Returns one grocerylists of a given foodplan //TODO unnötig?
+    //Returns one grocerylists of a given foodplan
     public async getGrocerylistFromFoodplan(foodplanId:number, grocerylistId:number): Promise<Grocerylist> {
         const result = await Grocerylist.findOne({where:{foodplanId : foodplanId,id:grocerylistId},relations:["supermarket"]});
         return result;

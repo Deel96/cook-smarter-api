@@ -5,7 +5,6 @@ import {Recipe} from "../models/entities/recipe";
 import {Cookday} from "../models/entities/cookday";
 import { GroceryEntry } from "../models/entities/groceryEntry";
 import { Grocerylist } from "../models/entities/grocerylist";
-import { GrocerylistUpdateDTO } from "../models/DTOs/grocerylist-update.dto";
 
 class FoodplanService {
     public async addRecipeToCookday(userId:number,cookdayId:number, recipeId:number,cookdayData:Cookday): Promise<string> {

@@ -1,4 +1,3 @@
-
 import { CommentDTO } from "../models/DTOs/comment.dto";
 import { Comment } from "../models/entities/comment";
 
@@ -12,12 +11,6 @@ export class CommentMapper{
                 authorId:item.author.id
                 
             }
-
-    // toPersistence(u: RecipePreviewDTO): RecipePreview {
-    //     return undefined;
-    // }
-
-
 }
 
 }

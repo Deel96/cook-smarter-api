@@ -19,7 +19,6 @@ passport.use(new passportLocal.Strategy({
     },
 
     async (email, password, done) =>{
-        const test = password;
         const foundUser = await User.findOne({email:email, password:password});
         if(!foundUser) return done(new HttpException(401,"User not found in Strategy"));
         return done(null, foundUser);

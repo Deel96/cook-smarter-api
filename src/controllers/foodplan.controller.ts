@@ -3,7 +3,6 @@ import {User} from "../models/entities/user";
 import {Foodplan} from "../models/entities/foodplan";
 import FoodplanService from "../services/foodplan.service";
 import {Cookday} from "../models/entities/cookday";
-import { GrocerylistUpdateDTO } from '../models/DTOs/grocerylist-update.dto';
 
 class FoodplanController {
     public addRecipeToCookday = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

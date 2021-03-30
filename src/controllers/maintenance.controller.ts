@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import "../config/passport.config";
-import {User} from "../models/entities/user";
-import AuthService from '../services/auth.service';
 import MaintenanceService from '../services/maintenance.service';
 
 class MaintenanceController {
@@ -31,11 +29,7 @@ class MaintenanceController {
         {
             next(e);
         } 
-
     }
-
-       
-        
 }
 
 export default MaintenanceController;

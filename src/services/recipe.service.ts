@@ -7,7 +7,6 @@ import { RecipePreviewDTO } from "../models/DTOs/recipe-preview.dto";
 import { RecipePreviewMapper } from "../mapper/RecipePreviewMapper";
 import { RecipeMapper } from "../mapper/RecipeMapper";
 import { RecipeDTO } from "../models/DTOs/recipe.dto";
-import { CommentDTO } from "../models/DTOs/comment.dto";
 class RecipeService {
 
     private recipePreviewMapper = new RecipePreviewMapper();

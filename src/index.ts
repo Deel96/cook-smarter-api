@@ -15,6 +15,9 @@ const dataBaseInitiator = new DatabaseInitiator();
 const drop = false;
 dataBaseInitiator.initDataBase(drop,drop).then(
 
+
+    
+
 app.express.listen(port, (err) => {
     if (err) {
         console.error(`Error starting server: ${err}`);
@@ -27,3 +30,5 @@ app.express.listen(port, (err) => {
 })
 
 )
+
+

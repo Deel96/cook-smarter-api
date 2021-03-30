@@ -10,9 +10,5 @@ export class IngredientEntryMapper{
                freshness : item.freshness,
                unit :item.unit
             }
-
-    // toPersistence(u: RecipePreviewDTO): RecipePreview {
-    //     return undefined;
-    // }
 }
 }

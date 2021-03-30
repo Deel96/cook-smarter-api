@@ -1,4 +1,4 @@
-import {Request, Router} from 'express';
+import {Router} from 'express';
 import GrocerylistController from "../controllers/grocerylist.controller";
 
 class GrocerylistRoute {
@@ -9,10 +9,9 @@ class GrocerylistRoute {
         this.initializeRoutes();
     }
 
-    private initializeRoutes() {//TODO
+    private initializeRoutes() {
         this.router.get("/me/foodplan/grocerylists", this.grocerylistController.getAllGroceryListsFromFoodplan);
         this.router.put(`/me/foodplan/grocerylists/:id`, this.grocerylistController.updateGrocerylist);
-        //this.router.delete(`/me/foodplan/cookdays/:cookdayId/recipes/:recipeId`, this.foodplanController.deleteRecipeFromCookday);
     }
 }
 

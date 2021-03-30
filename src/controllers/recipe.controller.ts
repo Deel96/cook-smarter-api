@@ -108,7 +108,6 @@ class RecipeController {
         }
     };
 
-    //unnötig? TODO
     public getAllRatingsFromRecipe = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const ratingId = Number(req.params.id);

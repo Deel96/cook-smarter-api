@@ -22,12 +22,6 @@ export class RecipeMapper{
                 ingredients: this.insertIngredients(item),
                 author: item.author.username
     }
-
-    // toPersistence(u: RecipePreviewDTO): RecipePreview {
-    //     return undefined;
-    // }
-
-
 }
 private calcRatingOfRecipe(recipe:Recipe):RatingInfoDTO{
     const length = recipe.ratings?.length;
