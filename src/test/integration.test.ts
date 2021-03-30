@@ -33,7 +33,7 @@ describe("Test API",()=>{
         await dataBaseInitiator.initDataBase(drop,drop)
 
         const { body,res } = await request(testApp.express).get("/recipes");
-
+        console.log(body);
         expect(res.statusCode).toEqual(200);
         })
 
